@@ -43,5 +43,22 @@ export const HomeModel = {
       console.error("기타 큐레이션 조회 실패:", error);
       return [];
     }
+  },
+
+
+
+  getEmotionCurations: async (emotion) => {
+    try {
+      const [curations] = await pool.query(sql.getEmotionCurations, [emotion]);
+      return curations.map((curation) => ({
+        curationId: curation.curation_id,
+        curationName: curation.curation_name,
+        curationType: curation.curation_type,
+        movies: curation.movies
+      }));
+    } catch (error) {
+      console.error("감정 기반 큐레이션 조회 실패:", error);
+      return [];
+    }
   }
 };

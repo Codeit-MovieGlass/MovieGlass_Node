@@ -1,8 +1,9 @@
 import express from "express";
-import { getHomeData } from "./home.controller.js";
+import { getHomeData, getEmotionCurations } from "./home.controller.js";
 
 export const homeRouter = express.Router();
 
 homeRouter.get("/", getHomeData);
+homeRouter.get("/emotions", getEmotionCurations);
 
 export default homeRouter;

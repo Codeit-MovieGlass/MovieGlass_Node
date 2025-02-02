@@ -18,3 +18,23 @@ export const getHomeData = async (req, res) => {
     res.send(response(status.BAD_REQUEST, { success: false, message: "홈 데이터를 가져오는 중 오류 발생" }));
   }
 };
+export const getEmotionCurations = async (req, res) => {
+    try {
+      const { emotion } = req.query;
+      
+      if (!emotion) {
+        return res.send(response(status.BAD_REQUEST, { success: false, message: "감정(emotion) 값이 필요합니다." }));
+      }
+  
+      const curations = await HomeService.getEmotionCurations(emotion);
+  
+      res.send(response(status.SUCCESS, {
+        success: true,
+        message: "큐레이션 데이터를 성공적으로 가져왔습니다.",
+        data: { curations }
+      }));
+    } catch (error) {
+      console.error("이모지 큐레이션 조회 실패:", error);
+      res.send(response(status.BAD_REQUEST, { success: false, message: "큐레이션 데이터를 가져오는 중 오류 발생" }));
+    }
+  };
