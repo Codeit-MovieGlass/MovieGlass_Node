@@ -4,6 +4,7 @@ import { healthCheck } from "./srcs/utils/healthCheck.js";
 import cors from "cors";
 import { userRouter } from "./srcs/user/user.route.js";
 import  authRouter  from "./srcs/auth/auth.route.js";
+import  homeRouter  from "./srcs/home/home.route.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cors());
 app.use("/health", healthCheck);
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/home", homeRouter);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
