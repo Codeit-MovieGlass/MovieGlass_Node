@@ -38,3 +38,30 @@ export const getEmotionCurations = async (req, res) => {
       res.send(response(status.BAD_REQUEST, { success: false, message: "큐레이션 데이터를 가져오는 중 오류 발생" }));
     }
   };
+
+
+
+export const searchMovies = async (req, res) => {
+    try {
+      const { query } = req.query;
+      if (!query) {
+        return res.send(response(status.BAD_REQUEST, {
+          status: "fail",
+          message: "검색어(query) 값이 필요합니다."
+        }));
+      }
+      const searchResults = await HomeService.searchMovies(query);
+  
+      res.send(response(status.SUCCESS, {
+        status: "success",
+        message: "영화 검색 결과를 성공적으로 가져왔습니다.",
+        data: searchResults
+      }));
+    } catch (error) {
+      console.error("영화 검색 오류:", error);
+      res.send(response(status.BAD_REQUEST, {
+        status: "fail",
+        message: "영화 검색 중 오류가 발생했습니다."
+      }));
+    }
+};

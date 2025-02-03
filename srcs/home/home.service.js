@@ -27,6 +27,20 @@ export const HomeService = {
       console.error("감정 기반 큐레이션 서비스 오류:", error);
       throw new Error("감정 기반 큐레이션 조회 실패");
     }
+  },
+
+  searchMovies: async (query) => {
+    try {
+      const searchResults = await HomeModel.getSearchResults(query);
+      const recommendations = await HomeModel.getRecommendations(query);
+      return { search_results: searchResults, recommendations };
+    } catch (error) {
+      console.error("영화 검색 서비스 오류:", error);
+      throw new Error("영화 검색 서비스 실패");
+    }
   }
+  
 };
+
+
 

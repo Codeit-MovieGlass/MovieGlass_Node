@@ -60,5 +60,36 @@ export const HomeModel = {
       console.error("감정 기반 큐레이션 조회 실패:", error);
       return [];
     }
+  },
+
+
+  // 검색어 기반 영화 검색
+  getSearchResults: async (query) => {
+    try {
+      const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
+      return movies.map((movie) => ({
+        movie_id: movie.movie_id,
+        title: movie.movie_name,
+        poster_url: movie.production_image
+      }));
+    } catch (error) {
+      console.error("영화 검색 결과 조회 실패:", error);
+      return [];
+    }
+  },
+
+  // 장르, 키워드, 인물 기반 추천 영화 조회
+  getRecommendations: async (query) => {
+    try {
+      const [movies] = await pool.query(sql.recommendMovies, [`%${query}%`, `%${query}%`, `%${query}%`]);
+      return movies.map((movie) => ({
+        movie_id: movie.movie_id,
+        title: movie.movie_name,
+        poster_url: movie.production_image
+      }));
+    } catch (error) {
+      console.error("추천 영화 조회 실패:", error);
+      return [];
+    }
   }
 };
