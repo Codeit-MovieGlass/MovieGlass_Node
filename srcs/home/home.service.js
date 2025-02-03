@@ -1,0 +1,46 @@
+import { HomeModel } from "./home.model.js";
+
+export const HomeService = {
+  getHomeData: async (weather) => {
+    try {
+      const top10Movies = await HomeModel.getTop10Movies();
+      const weatherCurations = await HomeModel.getWeatherCurations(weather);
+      const otherCurations = await HomeModel.getOtherCurations();
+
+      return {
+        top10Movies,
+        weatherCurations,
+        otherCurations
+      };
+    } catch (error) {
+      console.error("홈 서비스 오류:", error);
+      throw new Error("홈 데이터 조회 실패");
+    }
+  },
+
+
+  getEmotionCurations: async (emotion) => {
+    try {
+      const curations = await HomeModel.getEmotionCurations(emotion);
+      return curations;
+    } catch (error) {
+      console.error("감정 기반 큐레이션 서비스 오류:", error);
+      throw new Error("감정 기반 큐레이션 조회 실패");
+    }
+  },
+
+  searchMovies: async (query) => {
+    try {
+      const searchResults = await HomeModel.getSearchResults(query);
+      const recommendations = await HomeModel.getRecommendations(query);
+      return { search_results: searchResults, recommendations };
+    } catch (error) {
+      console.error("영화 검색 서비스 오류:", error);
+      throw new Error("영화 검색 서비스 실패");
+    }
+  }
+  
+};
+
+
+
