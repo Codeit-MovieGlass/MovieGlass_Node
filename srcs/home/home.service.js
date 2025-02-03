@@ -31,8 +31,16 @@ export const HomeService = {
 
   searchMovies: async (query) => {
     try {
+      // 검색어 기반 영화 검색
       const searchResults = await HomeModel.getSearchResults(query);
-      const recommendations = await HomeModel.getRecommendations(query);
+
+      let recommendations = [];
+      if (searchResults.length > 0) {
+        // 첫 번째 검색 결과 영화 가져오기
+        const firstMovie = searchResults[0];
+        recommendations = await HomeModel.getRecommendations(firstMovie);
+      }
+
       return { search_results: searchResults, recommendations };
     } catch (error) {
       console.error("영화 검색 서비스 오류:", error);

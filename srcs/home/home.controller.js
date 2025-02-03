@@ -41,15 +41,17 @@ export const getEmotionCurations = async (req, res) => {
 
 
 
-export const searchMovies = async (req, res) => {
+  export const searchMovies = async (req, res) => {
     try {
       const { query } = req.query;
+  
       if (!query) {
         return res.send(response(status.BAD_REQUEST, {
           status: "fail",
           message: "검색어(query) 값이 필요합니다."
         }));
       }
+  
       const searchResults = await HomeService.searchMovies(query);
   
       res.send(response(status.SUCCESS, {
@@ -64,4 +66,4 @@ export const searchMovies = async (req, res) => {
         message: "영화 검색 중 오류가 발생했습니다."
       }));
     }
-};
+  };
