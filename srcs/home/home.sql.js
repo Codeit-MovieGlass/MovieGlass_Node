@@ -80,34 +80,32 @@ export const sql = {
 
 
 
-    // 검색어 기반 영화 검색 (제목, 인물, 키워드, 장르 포함)
-    searchMovies: `
+  // 검색어 기반 영화 검색 (제목, 인물, 키워드, 장르 포함)
+  searchMovies: `
     SELECT 
-        movie_id, 
-        movie_name, 
-        production_image 
+      movie_id, 
+      movie_name, 
+      production_image,
+      production_genre,
+      production_keyword
     FROM Movie
     WHERE movie_name LIKE ? 
-        OR production_genre LIKE ?
-        OR production_keyword LIKE ?
-        OR movie_id IN (
-            SELECT movie_id FROM MovieCast WHERE actor_name LIKE ?
-        );
-    `,
+      OR production_genre LIKE ?
+      OR production_keyword LIKE ?
+  `,
 
-    // 추천 영화 조회 (장르, 키워드, 인물 기반)
-    recommendMovies: `
+  // 첫 번째 검색 결과를 기준으로 추천 영화 조회
+  recommendMovies: `
     SELECT 
-        DISTINCT m.movie_id, 
-        m.movie_name, 
-        m.production_image 
+      DISTINCT m.movie_id, 
+      m.movie_name, 
+      m.production_image 
     FROM Movie m
-    JOIN MovieCast mc ON m.movie_id = mc.movie_id
     WHERE m.production_genre LIKE ?
-        OR m.production_keyword LIKE ?
-        OR mc.actor_name LIKE ?
+      OR m.production_keyword LIKE ?
+      OR m.movie_name LIKE ?
     ORDER BY RAND()
     LIMIT 5;
-    `
+  `
 };
   

@@ -70,7 +70,9 @@ export const HomeModel = {
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
         title: movie.movie_name,
-        poster_url: movie.production_image
+        poster_url: movie.production_image,
+        genre: movie.production_genre,
+        keyword: movie.production_keyword
       }));
     } catch (error) {
       console.error("영화 검색 결과 조회 실패:", error);
@@ -78,10 +80,14 @@ export const HomeModel = {
     }
   },
 
-  // 장르, 키워드, 인물 기반 추천 영화 조회
-  getRecommendations: async (query) => {
+  // 첫 번째 검색 결과를 기준으로 추천 영화 가져오기
+  getRecommendations: async (firstMovie) => {
     try {
-      const [movies] = await pool.query(sql.recommendMovies, [`%${query}%`, `%${query}%`, `%${query}%`]);
+      const [movies] = await pool.query(sql.recommendMovies, [
+        `%${firstMovie.genre}%`,
+        `%${firstMovie.keyword}%`,
+        `%${firstMovie.title.split(" ")[0]}%` // 제목의 첫 단어로 검색
+      ]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
         title: movie.movie_name,
