@@ -74,9 +74,7 @@ export const userLogout = async (req, res) => {
 export const signupUser = async (req, res) => {
   try {
     const signupInfo = req.body;
-    console.log(signupInfo);
     const isSusccess = await UserService.postUser(signupInfo);
-    console.log(isSusccess);
     res.send(response(status.SUCCESS, singupUserDTO(isSusccess)));
   } catch (error) {
     res.send(response(status.BAD_REQUEST, errorResponseDTO("Invalid request")));

@@ -34,10 +34,15 @@ export const UserModel = {
   signup: async (signupInfo) => {
     try {
       const email = signupInfo.email;
-      console.log(email);
-      const [result] = await pool.query(sql.checkIdOverlap, email);
-      console.log(result);
-      if (result.length === 0) {
+      try {
+        const [result] = await pool.query(sql.checkIdOverlap, [email]);
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+        throw new Error("회원 가입 실패");
+      }
+
+        if (result.length === 0) {
         await pool.query(sql.postNewUser, [
           signupInfo.email,
           signupInfo.password,
