@@ -9,8 +9,6 @@ export const getHomeData = async (req, res) => {
     const homeData = await HomeService.getHomeData(weather);
 
     res.send(response(status.SUCCESS, {
-      success: true,
-      message: "홈 데이터를 성공적으로 가져왔습니다.",
       data: homeData
     }));
   } catch (error) {
@@ -29,8 +27,6 @@ export const getEmotionCurations = async (req, res) => {
       const curations = await HomeService.getEmotionCurations(emotion);
   
       res.send(response(status.SUCCESS, {
-        success: true,
-        message: "큐레이션 데이터를 성공적으로 가져왔습니다.",
         data: { curations }
       }));
     } catch (error) {
@@ -55,8 +51,6 @@ export const getEmotionCurations = async (req, res) => {
       const searchResults = await HomeService.searchMovies(query);
   
       res.send(response(status.SUCCESS, {
-        status: "success",
-        message: "영화 검색 결과를 성공적으로 가져왔습니다.",
         data: searchResults
       }));
     } catch (error) {
@@ -64,6 +58,23 @@ export const getEmotionCurations = async (req, res) => {
       res.send(response(status.BAD_REQUEST, {
         status: "fail",
         message: "영화 검색 중 오류가 발생했습니다."
+      }));
+    }
+  };
+
+
+  export const shuffleCurations = async (req, res) => {
+    try {
+      const shuffledCurations = await HomeService.shuffleCurations();
+  
+      res.send(response(status.SUCCESS, {
+        data: { shuffled_curations: shuffledCurations }
+      }));
+    } catch (error) {
+      console.error("큐레이션 셔플 오류:", error);
+      res.send(response(status.BAD_REQUEST, {
+        status: "fail",
+        message: "큐레이션 셔플 중 오류가 발생했습니다."
       }));
     }
   };
