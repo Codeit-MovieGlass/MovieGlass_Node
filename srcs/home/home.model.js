@@ -97,5 +97,20 @@ export const HomeModel = {
       console.error("추천 영화 조회 실패:", error);
       return [];
     }
+  },
+
+
+  getShuffledCurations: async () => {
+    try {
+      const [curations] = await pool.query(sql.shuffleCurations);
+      return curations.map((curation) => ({
+        curation_id: curation.curation_id,
+        curation_name: curation.curation_name,
+        movies: curation.movies
+      }));
+    } catch (error) {
+      console.error("큐레이션 셔플 조회 실패:", error);
+      return [];
+    }
   }
 };

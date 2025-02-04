@@ -106,6 +106,25 @@ export const sql = {
       OR m.movie_name LIKE ?
     ORDER BY RAND()
     LIMIT 5;
-  `
+  `,
+
+  shuffleCurations: `
+    SELECT 
+      c.curation_id,
+      c.curation_name,
+      JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'movie_id', m.movie_id,
+          'movie_name', m.movie_name,
+          'poster_url', m.production_image
+        )
+      ) AS movies
+    FROM Curation c
+    JOIN CurationMovie cm ON c.curation_id = cm.curation_id
+    JOIN Movie m ON cm.movie_id = m.movie_id
+    GROUP BY c.curation_id
+    ORDER BY RAND()
+    LIMIT 3;
+  `,
 };
   

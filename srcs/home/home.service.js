@@ -46,8 +46,18 @@ export const HomeService = {
       console.error("영화 검색 서비스 오류:", error);
       throw new Error("영화 검색 서비스 실패");
     }
-  }
+  },
   
+  shuffleCurations: async () => {
+    try {
+      // 기존 큐레이션을 제외한 랜덤 큐레이션 가져오기
+      const shuffledCurations = await HomeModel.getShuffledCurations();
+      return shuffledCurations;
+    } catch (error) {
+      console.error("큐레이션 셔플 서비스 오류:", error);
+      throw new Error("큐레이션 셔플 조회 실패");
+    }
+  }
 };
 
 
