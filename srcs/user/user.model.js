@@ -35,7 +35,7 @@ export const UserModel = {
     try {
       const email = signupInfo.email;
       console.log(email);
-      const [result] = await pool.query(sql.checkIdOverlap, email);
+      const [result] = await pool.query(sql.checkIdOverlap, [email]);
       console.log(result);
       if (result.length === 0) {
         await pool.query(sql.postNewUser, [
