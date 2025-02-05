@@ -42,8 +42,7 @@ export const UserModel = {
         console.log(error);
         throw new Error("회원 가입 실패");
       }
-
-        if (result.length === 0) {
+      if (result.length === 0) {
         await pool.query(sql.postNewUser, [
           signupInfo.email,
           signupInfo.password,
