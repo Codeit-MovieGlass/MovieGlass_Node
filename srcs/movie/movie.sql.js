@@ -44,5 +44,13 @@ recommendMovies: `
   ORDER BY RAND()
   LIMIT 5;
 `,
+// 영화 정보 조회 (장르, 키워드)
+getMovieInfo: `
+  SELECT 
+    production_genre AS genre,
+    production_keyword AS keyword
+  FROM Movie
+  WHERE movie_id = ?;
+`
 
 };
