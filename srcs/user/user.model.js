@@ -39,12 +39,9 @@ export const UserModel = {
       console.log("🔹 DB_PASSWORD:", process.env.DB_PASSWORD);
       console.log("🔹 DB_HOST:", process.env.DB_HOST);
       console.log("🔹 DB_PORT:", process.env.DB_PORT);
-      try {
-        const [result] = await pool.query(sql.checkIdOverlap, [email]);
-      } catch (error) {
-        console.log(error);
-        throw new Error("회원 가입 실패");
-      }
+
+      console.log(sql.checkIdOverlap);
+      const [result] = await pool.query(sql.checkIdOverlap, [email]);
       if (result.length === 0) {
         await pool.query(sql.postNewUser, [
           signupInfo.email,
@@ -56,6 +53,7 @@ export const UserModel = {
         return "회원가입 실패";
       }
     } catch (error) {
+      console.log(error);
       throw new Error("회원 가입 실패");
     }
   },

@@ -36,8 +36,6 @@ export const UserService = {
   postUser: async (signupInfo) => {
     try {
       const { email, password, nickname } = signupInfo;
-      console.log("signupInfo:", signupInfo);
-      console.log("🔹 DB_NAME:", process.env.DB_NAME);
 
       //이름, 아이디, 패스워드가 모두 있으면
       if (email && password && nickname) {
