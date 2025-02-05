@@ -2,6 +2,7 @@
 import {
     kakaoLogin,
     naverLogin,
+    googleLogin,
     refreshTokens
 } from "./auth.service.js";
 import { response } from "../../config/response.js";
@@ -33,8 +34,99 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
     }
 };
 
-const handleKakaoAuth = (req, res) => handleAuth(kakaoLogin, "kakao", req, res);
-const handleNaverAuth = (req, res) => handleAuth(naverLogin, "naver", req, res);
+const handleKakaoAuth = async(req, res) => {
+    try {
+        const { code } = req.query;
+        if (!code) {
+            return res.json(response(
+                { isSuccess: status.BAD_REQUEST.isSuccess, code:400, message: "인가 코드가 없습니다." },
+                authErrorResponseDTO("인가 코드가 필요합니다.")
+            ));
+        }
+
+        console.log("카카오 로그인 - 받은 인가코드:", code);
+
+        const { accessToken, refreshToken, userInfo } = await kakaoLogin(code);
+
+        res.setHeader("Authorization", `Bearer ${accessToken}`);
+
+        return res.json(response(
+            { isSuccess: status.SUCCESS.isSuccess, code:200, message: "카카오 로그인 성공" },
+            authResponseDTO(accessToken, refreshToken, userInfo)
+        ));
+    } catch (error) {
+        console.error("카카오 로그인 에러:", error);
+        return res.json(response(
+            { isSuccess: status.BAD_REQUEST.isSuccess, code:400, message: "카카오 로그인 실패" },
+            authErrorResponseDTO(error.message)
+        ));
+    }
+};
+const handleNaverAuth = async (req, res) => {
+    try {
+        // 1. 프론트에서 받은 인가코드
+        const { code } = req.query;
+        if (!code) {
+            return res.json(response(
+                { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
+                authErrorResponseDTO("인가 코드가 필요합니다.")
+            ));
+        }
+
+        console.log("네이버 로그인 - 받은 인가코드:", code);
+
+        // 2. 네이버 로그인 처리
+        const { accessToken, refreshToken, userInfo } = await naverLogin(code);
+
+        // 3. 토큰을 헤더에 추가
+        res.setHeader("Authorization", `Bearer ${accessToken}`);
+
+        // 4. 응답 반환
+        return res.json(response(
+            { isSuccess: status.SUCCESS.isSuccess, code: 200, message: "네이버 로그인 성공" },
+            authResponseDTO(accessToken, refreshToken, userInfo)
+        ));
+    } catch (error) {
+        console.error("네이버 로그인 에러:", error);
+        return res.json(response(
+            { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "네이버 로그인 실패" },
+            authErrorResponseDTO(error.message)
+        ));
+    }
+};
+
+const handleGoogleAuth = async (req, res) => {
+    try {
+        // 1. 프론트에서 받은 인가코드
+        const { code } = req.query;
+        if (!code) {
+            return res.json(response(
+                { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
+                authErrorResponseDTO("인가 코드가 필요합니다.")
+            ));
+        }
+
+        console.log("구글 로그인 - 받은 인가코드:", code);
+
+        // 2. 구글 로그인 처리
+        const { accessToken, refreshToken, userInfo } = await googleLogin(code);
+
+        // 3. 토큰을 헤더에 추가
+        res.setHeader("Authorization", `Bearer ${accessToken}`);
+
+        // 4. 응답 반환
+        return res.json(response(
+            { isSuccess: status.SUCCESS.isSuccess, code: 200, message: "구글 로그인 성공" },
+            authResponseDTO(accessToken, refreshToken, userInfo)
+        ));
+    } catch (error) {
+        console.error("구글 로그인 에러:", error);
+        return res.json(response(
+            { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "구글 로그인 실패" },
+            authErrorResponseDTO(error.message)
+        ));
+    }
+};
 
 const handleTokenRefresh = async (req, res) => {
     try {
@@ -65,5 +157,6 @@ const handleTokenRefresh = async (req, res) => {
 export {
     handleKakaoAuth,
     handleNaverAuth,
-    handleTokenRefresh
+    handleTokenRefresh,
+    handleGoogleAuth
 };
