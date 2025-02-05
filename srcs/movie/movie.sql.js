@@ -1,4 +1,10 @@
 export const sql = {
+  getMovieInfo: `
+    SELECT
+      *
+    FROM Movie
+    WHERE movie_id = ?;
+  `,
   // 사용자 맞춤 TOP 10 영화 조회 (변경 없음)
   getTop10Movies: `
     SELECT 
@@ -45,7 +51,7 @@ recommendMovies: `
   LIMIT 5;
 `,
 // 영화 정보 조회 (장르, 키워드)
-getMovieInfo: `
+getMovieGenreAndKeyword: `
   SELECT 
     production_genre AS genre,
     production_keyword AS keyword

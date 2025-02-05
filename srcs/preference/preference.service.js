@@ -4,7 +4,7 @@ import { sql } from "../movie/movie.sql.js";
 export const PreferenceService = {
   updateUserPreferences: async ({ user_id, movie_id , rating }) => {
     try {
-        const { genre, keyword } = await pool.query(sql.getMovieInfo, [movie_id]);
+        const { genre, keyword } = await pool.query(sql.getMovieGenreAndKeyword, [movie_id]);
         
         // 장르 가중치 업데이트
         if (genre) {
