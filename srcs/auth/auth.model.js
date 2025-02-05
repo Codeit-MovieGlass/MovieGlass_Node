@@ -3,9 +3,9 @@ import { pool } from "../../config/db.js";
 
 const getUserBySocialId = async (socialId, provider) => {
     const [rows] = await pool.query(
-        `SELECT user_id, nickname, status, name, email, social_provider, social_id, refresh_token
+        `SELECT user_id, nickname, email, provider, social_id, refresh_token
          FROM user
-         WHERE social_id = ? AND social_provider = ?`, 
+         WHERE social_id = ? AND provider = ?`, 
         [socialId, provider]
     );
     return rows[0];
@@ -52,21 +52,23 @@ const generateUniqueNickname = async () => {
 };
 
 
-const signUp = async (name, socialId, provider, email) => {
-    const existingUser = await getUserBySocialId(socialId, provider);
-    if (existingUser) {
-        return existingUser.user_id; 
+const signUpSocialUser = async (email, socialId, provider, nickname, profileImage) => {
+    try {
+        const existingUser = await getUserBySocialId(socialId, provider);
+        if (existingUser) {
+            return existingUser.user_id;
+        }
+
+        const [result] = await pool.query(
+            `INSERT INTO user (email, password, social_id, provider, nickname, profile_image_url, refresh_token) 
+             VALUES (?, NULL, ?, ?, ?, ?, NULL)`,
+            [email, socialId, provider, nickname, profileImage]
+        );
+
+        return result.insertId;
+    } catch (error) {
+        throw new Error("소셜 회원가입 실패: " + error.message);
     }
-
-    const nickname = await generateUniqueNickname();
-
-    const [result] = await pool.query(
-        `INSERT INTO user (
-            nickname, status, name, email, social_provider, social_id, refresh_token, created_at, updated_at
-        ) VALUES (?, 'active', ?, ?, ?, ?, NULL, NOW(), NOW())`,
-        [nickname, name, email, provider, socialId]
-    );
-    return result.insertId;
 };
 
 
@@ -80,4 +82,4 @@ const updateRefreshToken = async (userId, refreshToken) => {
     }
 };
 
-export { getUserBySocialId, signUp, updateRefreshToken };
+export { getUserBySocialId, signUpSocialUser, updateRefreshToken };

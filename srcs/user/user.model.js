@@ -4,11 +4,20 @@ import jwt from "jsonwebtoken";
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 
 export const UserModel = {
+  findUserByEmail: async (email) => {
+    const [user] = await pool.query(
+        "SELECT user_id, email, password, social_id, provider, nickname, profile_image_url FROM user WHERE email = ?",
+        [email]
+    );
+    return user.length ? user[0] : null;
+},
+
+
   findById: async (userId) => {
     try {
       console.log(sql.findUserById);
       console.log("userID:", userId);
-      const [results] = await pool.query(sql.findUserById, userId);
+      const [results] = await pool.query(sql.findUserById, [userId]);
       return results[0];
     } catch (error) {
       throw new Error("유저 조회 실패");
@@ -50,6 +59,26 @@ export const UserModel = {
       throw new Error("회원 가입 실패");
     }
   },
+  signupSocialUser: async (email, socialId, provider, nickname, profileImage) => {
+    try {
+        const existingUser = await UserModel.findUserByEmail(email);
+        if (existingUser) {
+            if (existingUser.provider !== provider) {
+                throw new Error("이미 가입된 이메일입니다.");
+            }
+            return existingUser.user_id;
+        }
+
+        const [result] = await pool.query(
+            "INSERT INTO user (email, password, social_id, provider, nickname, profile_image_url) VALUES (?, NULL, ?, ?, ?, ?)",
+            [email, socialId, provider, nickname, profileImage]
+        );
+
+        return result.insertId;
+    } catch (error) {
+        throw new Error("소셜 회원가입 실패: " + error.message);
+    }
+},
 
   loginGeneral: async (loginInfo) => {
     try {
