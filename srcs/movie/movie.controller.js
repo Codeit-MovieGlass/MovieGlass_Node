@@ -9,7 +9,7 @@ export const top10Data = async (req, res) => {
     const top10Data = await MovieService.getTop10Data(weather);
 
     res.send(response(status.SUCCESS, {
-      data: top10Data
+      top10Data
     }));
   } catch (error) {
     console.error("Top10 데이터 가져오기 오류:", error);
@@ -20,18 +20,16 @@ export const top10Data = async (req, res) => {
   export const searchMovies = async (req, res) => {
     try {
       const { query } = req.query;
-  
       if (!query) {
         return res.send(response(status.BAD_REQUEST, {
           status: "fail",
           message: "검색어(query) 값이 필요합니다."
         }));
-      }
-  
+      }  
       const searchResults = await MovieService.searchMovies(query);
   
       res.send(response(status.SUCCESS, {
-        data: searchResults
+        searchResults
       }));
     } catch (error) {
       console.error("영화 검색 오류:", error);

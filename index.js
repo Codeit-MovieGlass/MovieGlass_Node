@@ -5,7 +5,7 @@ import cors from "cors";
 import { userRouter } from "./srcs/user/user.route.js";
 import  authRouter  from "./srcs/auth/auth.route.js";
 import  homeRouter  from "./srcs/home/home.route.js";
-// import  curationRouter  from "./srcs/curation/curation.route.js";
+import  curationRouter  from "./srcs/curation/curation.route.js";
 import  movieRouter  from "./srcs/movie/movie.route.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -25,7 +25,7 @@ app.use("/health", healthCheck);
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/movies", movieRouter);
-// app.use("/api/curations", curationRouter);
+app.use("/api/curations", curationRouter);
 app.use("/api/home", homeRouter);
 
 app.use((err, req, res, next) => {
