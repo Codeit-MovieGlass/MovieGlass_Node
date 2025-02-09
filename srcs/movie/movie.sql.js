@@ -13,6 +13,7 @@ export const sql = {
       movie_name AS movieName,
       production_year AS productionYear,
       production_genre AS productionGenre,
+      production_keyword AS productionKeyword,
       production_country AS productionCountry,
       production_image AS productionImage,
       horizontal_image AS horizontalImage,

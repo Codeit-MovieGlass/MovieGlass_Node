@@ -6,7 +6,19 @@ export const MovieModel = {
   getTop10Movies: async () => {
     try {
       const [movies] = await pool.query(sql.getTop10Movies);
-      return movies;
+
+      return movies.map((movie) => ({
+        id: movie.id,
+        kmdbId: movie.kmdbId,
+        movieName: movie.movieName,
+        productionYear: movie.productionYear,
+        productionGenre: movie.productionGenre ? movie.productionGenre.split(", ").map((g) => g.trim()) : [],
+        productionKeyword: movie.productionKeyword ? movie.productionKeyword.split(", ").map((k) => k.trim()) : [],
+        productionCountry: movie.productionCountry,
+        productionImage: movie.productionImage,
+        horizontalImage: movie.horizontalImage,
+        trailerUrl: movie.trailerUrl
+      }));
     } catch (error) {
       console.error("TOP 10 영화 조회 실패:", error);
       return [];
@@ -22,9 +34,7 @@ export const MovieModel = {
         movie_id: movie.movie_id,
         title: movie.movie_name,
         poster_url: movie.production_image,
-        genre: movie.production_genre,
-        keyword: movie.production_keyword
-      }));
+        }));
     } catch (error) {
       console.error("영화 검색 결과 조회 실패:", error);
       return [];

@@ -16,5 +16,15 @@ export const ReviewModel = {
       console.error("리뷰 저장 오류:", error);
       throw new Error("리뷰 저장 실패");
     }
-  }
+  },
+
+  selectReview: async ({ review_id }) => {
+    try {
+      const [review] = await pool.query(sql.selectReview, [review_id]);
+      return review[0];
+    } catch (error) {
+      console.error("리뷰 조회 오류:", error);
+      throw new Error("리뷰 조회 실패");
+    }
+  },
 };
