@@ -1,16 +1,17 @@
 export const sql = {
-    // 장르 가중치 업데이트 (기존 값이 있으면 증가, 없으면 삽입)
-    updateGenrePreference: `
-      INSERT INTO user_preference_weights (user_id, type, name, weight)
-      VALUES (?, 'GENRE', ?, ?)
-      ON DUPLICATE KEY UPDATE weight = weight + ?;
+    // 기존 데이터 확인 (user_id, type, name이 같은 데이터가 있는지 조회)
+    checkExistingPreference: `
+      SELECT * FROM user_preference_weights WHERE user_id = ? AND type = ? AND name = ?;
     `,
   
-    // 키워드 가중치 업데이트 (기존 값이 있으면 증가, 없으면 삽입)
-    updateKeywordPreference: `
-      INSERT INTO user_preference_weights (user_id, type, name, weight)
-      VALUES (?, 'KEYWORD', ?, ?)
-      ON DUPLICATE KEY UPDATE weight = weight + ?;
-    `
-  };
+    // 기존 데이터가 있으면 weight 증가
+    updateExistingPreference: `
+      UPDATE user_preference_weights SET weight = weight + ? WHERE user_id = ? AND type = ? AND name = ?;
+    `,
   
+    // 기존 데이터가 없으면 새로 삽입
+    insertNewPreference: `
+      INSERT INTO user_preference_weights (user_id, type, name, weight)
+      VALUES (?, ?, ?, ?);
+    `,  
+};

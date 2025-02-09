@@ -9,7 +9,6 @@ export const uploadReview = async (req, res) => {
     const { movie_id } = req.params;
     const { rating, review_comment, view_count } = req.body;
     const user_id = req.userId;
-
     // 리뷰 저장 요청
     const review = await ReviewService.createReview({
       user_id,
@@ -20,9 +19,9 @@ export const uploadReview = async (req, res) => {
     });
     
     await PreferenceService.updateUserPreferences({
-      user_id: reviewData.user_id,
-      movie_id: reviewData.movie_id,
-      ratingDIf: reviewData.rating
+      user_id: user_id,
+      movie_id: review.movie_id,
+      ratingDIf: review.rating
     });
 
     res.send(response(status.SUCCESS, {
@@ -55,9 +54,9 @@ export const updateReview = async (req, res) => {
     });
 
     await PreferenceService.updateUserPreferences({
-      user_id: reviewData.user_id,
-      movie_id: reviewData.movie_id,
-      ratingDIf: Math.abs(reviewData.rating-exRating.rating)
+      user_id: review.user_id,
+      movie_id: review.movie_id,
+      ratingDIf: review.rating-exRating.rating
     });
 
     res.send(response(status.SUCCESS, {

@@ -27,4 +27,14 @@ export const ReviewModel = {
       throw new Error("리뷰 조회 실패");
     }
   },
+
+  updateReview: async ({ user_id, movie_id, review_id, rating, review_comment, view_count }) => {
+    try {
+      await pool.query(sql.updateReview, [rating, review_comment, view_count, review_id]);
+      return { user_id, movie_id, review_id, rating, review_comment, view_count };
+    } catch (error) {
+      console.error("리뷰 수정 오류:", error);
+      throw new Error("리뷰 수정 실패");
+    }
+  }
 };

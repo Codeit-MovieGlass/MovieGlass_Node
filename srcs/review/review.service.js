@@ -20,5 +20,15 @@ export const ReviewService = {
       throw new Error("리뷰 조회 실패");
     }
   },
+
+  updateReview: async (reviewData) => {
+    try {
+      const review = await ReviewModel.updateReview(reviewData);
+      return review;
+    } catch (error) {
+      console.error("리뷰 수정 서비스 오류:", error);
+      throw new Error("리뷰 수정 실패");
+    }
+  },
 };
 

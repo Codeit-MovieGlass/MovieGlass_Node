@@ -9,5 +9,11 @@ export const sql = {
       FROM Review
       WHERE review_id = ?;
     `,
+
+    updateReview: `
+      UPDATE Review
+      SET rating = ?, review_comment = ?, view_count = ?
+      WHERE review_id = ?;
+    `,
   };
   
