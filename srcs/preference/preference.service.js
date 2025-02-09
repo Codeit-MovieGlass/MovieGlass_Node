@@ -1,18 +1,16 @@
 import { PreferenceModel } from "./preference.model.js";
-import { sql } from "../movie/movie.sql.js";
-
+import { MovieModel } from "../movie/movie.model.js";
 export const PreferenceService = {
   updateUserPreferences: async ({ user_id, movie_id , ratingDIf }) => {
-    try {
-        const { genre, keyword } = await pool.query(sql.getMovieGenreAndKeyword, [movie_id]);
+    try {        
+        const { genre, keyword } = await MovieModel.getMovieGenreAndKeyword(movie_id);
         
         // 장르 가중치 업데이트
-        if (genre) {
-            await PreferenceModel.updateGenrePreference({ user_id, genre, ratingDIf });
+        if (genre != undefined) {
+          await PreferenceModel.updateGenrePreference({ user_id, genre, ratingDIf });
         }
-
         // 키워드 가중치 업데이트
-        if (keyword) {
+        if (keyword != undefined) {
             await PreferenceModel.updateKeywordPreference({ user_id, keyword, ratingDIf });
         }
     } catch (error) {

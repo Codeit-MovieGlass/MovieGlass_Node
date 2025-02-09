@@ -58,5 +58,17 @@ export const MovieModel = {
       console.error("추천 영화 조회 실패:", error);
       return [];
     }
-  }
+  },
+
+
+  getMovieGenreAndKeyword: async (movie_id) => {
+    try {
+      const [rows] = await pool.query(sql.getMovieGenreAndKeyword, [movie_id]);
+      return rows.length > 0 ? rows[0] : { genre: null, keyword: null };
+    } catch (error) {
+      console.error("영화 장르 및 키워드 조회 오류:", error);
+      throw new Error("영화 정보 조회 실패");
+    }
+  },
+
 };
