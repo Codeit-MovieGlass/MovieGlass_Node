@@ -15,8 +15,6 @@ export const UserModel = {
 
   findById: async (userId) => {
     try {
-      console.log(sql.findUserById);
-      console.log("userID:", userId);
       const [results] = await pool.query(sql.findUserById, [userId]);
       return results[0];
     } catch (error) {
@@ -53,7 +51,7 @@ export const UserModel = {
         ]);
         return "회원가입 성공";
       } else {
-        return "회원가입 실패";
+        throw new Error("이미 가입된 이메일입니다.");
       }
     } catch (error) {
       console.log(error);

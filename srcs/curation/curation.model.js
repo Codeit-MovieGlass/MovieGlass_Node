@@ -18,9 +18,16 @@ export const CurationModel = {
   },
 
 
-  getShuffledCurations: async () => {
+  getShuffledCurations: async (req) => {
     try {
-      const [curations] = await pool.query(sql.shuffleCurations);
+      let curations;
+      
+      if (req.body && req.body.exCuration && Array.isArray(req.body.exCuration) && req.body.exCuration.length > 0) {
+        [curations] = await pool.query(sql.shuffleCurations, [req.body.exCuration]);
+      } else {
+        [curations] = await pool.query(sql.getTwoCurations);
+      }
+  
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,

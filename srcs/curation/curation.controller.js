@@ -25,7 +25,7 @@ export const getEmotionCurations = async (req, res) => {
 
   export const shuffleCurations = async (req, res) => {
     try {
-      const shuffledCurations = await CurationService.shuffleCurations();
+      const shuffledCurations = await CurationService.shuffleCurations(req);
   
       res.send(response(status.SUCCESS, {
         shuffled_curations: shuffledCurations
@@ -33,8 +33,7 @@ export const getEmotionCurations = async (req, res) => {
     } catch (error) {
       console.error("큐레이션 셔플 오류:", error);
       res.send(response(status.BAD_REQUEST, {
-        status: "fail",
-        message: "큐레이션 셔플 중 오류가 발생했습니다."
+        error: error,
       }));
     }
   };

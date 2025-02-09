@@ -2,18 +2,18 @@ import { PreferenceModel } from "./preference.model.js";
 import { sql } from "../movie/movie.sql.js";
 
 export const PreferenceService = {
-  updateUserPreferences: async ({ user_id, movie_id , rating }) => {
+  updateUserPreferences: async ({ user_id, movie_id , ratingDIf }) => {
     try {
-        const { genre, keyword } = await pool.query(sql.getMovieInfo, [movie_id]);
+        const { genre, keyword } = await pool.query(sql.getMovieGenreAndKeyword, [movie_id]);
         
         // 장르 가중치 업데이트
         if (genre) {
-            await PreferenceModel.updateGenrePreference({ user_id, genre, rating });
+            await PreferenceModel.updateGenrePreference({ user_id, genre, ratingDIf });
         }
 
         // 키워드 가중치 업데이트
         if (keyword) {
-            await PreferenceModel.updateKeywordPreference({ user_id, keyword, rating });
+            await PreferenceModel.updateKeywordPreference({ user_id, keyword, ratingDIf });
         }
     } catch (error) {
       console.error("사용자 선호도 업데이트 오류:", error);

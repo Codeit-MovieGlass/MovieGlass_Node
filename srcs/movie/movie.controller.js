@@ -2,12 +2,11 @@ import { MovieService } from "./movie.service.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 
-// 새ㅔ10 데이터 가져오기
+// top10 데이터 가져오기
 export const top10Data = async (req, res) => {
   try {
     const weather  = "맑음"; // TODO : 날씨 API 연동 후 수정
     const top10Data = await MovieService.getTop10Data(weather);
-
     res.send(response(status.SUCCESS, {
       top10Data
     }));
