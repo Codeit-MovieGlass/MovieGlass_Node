@@ -36,5 +36,14 @@ export const ReviewModel = {
       console.error("리뷰 수정 오류:", error);
       throw new Error("리뷰 수정 실패");
     }
+  },
+
+  deleteReview: async ({ review_id }) => {
+    try {
+      await pool.query(sql.deleteReview, [review_id]);
+    } catch (error) {
+      console.error("리뷰 삭제 오류:", error);
+      throw new Error("리뷰 삭제 실패");
+    }
   }
 };

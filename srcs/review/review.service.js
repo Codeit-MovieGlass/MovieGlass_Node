@@ -30,5 +30,14 @@ export const ReviewService = {
       throw new Error("리뷰 수정 실패");
     }
   },
+
+  deleteReview: async ({ review_id }) => {
+    try {
+      await ReviewModel.deleteReview({ review_id });
+    } catch (error) {
+      console.error("리뷰 삭제 서비스 오류:", error);
+      throw new Error("리뷰 삭제 실패");
+    }
+  },
 };
 

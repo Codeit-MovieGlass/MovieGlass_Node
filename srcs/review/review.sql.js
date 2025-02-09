@@ -15,5 +15,9 @@ export const sql = {
       SET rating = ?, review_comment = ?, view_count = ?
       WHERE review_id = ?;
     `,
+    deleteReview: `
+      DELETE FROM Review
+      WHERE review_id = ?;
+    `,
   };
   

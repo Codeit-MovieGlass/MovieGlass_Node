@@ -70,3 +70,31 @@ export const updateReview = async (req, res) => {
     }));
   }
 }
+
+
+export const deleteReview = async (req, res) => {
+  try {
+    const { movie_id, review_id } = req.params;
+    const user_id = req.userId;
+
+    const exRating = await ReviewService.getReview({ review_id });
+
+    await ReviewService.deleteReview({ review_id });
+
+    await PreferenceService.updateUserPreferences({
+      user_id: user_id,
+      movie_id: movie_id,
+      ratingDIf: -exRating.rating
+    });
+
+    res.send(response(status.SUCCESS, {
+      data: "리뷰 삭제 성공"
+    }));
+  } catch (error) {
+    console.error("리뷰 삭제 오류:", error);
+    res.send(response(status.BAD_REQUEST, {
+      success: false,
+      message: "리뷰 삭제 중 오류가 발생했습니다."
+    }));
+  }
+}
