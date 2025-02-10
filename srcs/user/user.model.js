@@ -1,6 +1,8 @@
 import { pool } from "../../config/db.js";
 import { sql } from "./user.sql.js";
 import jwt from "jsonwebtoken";
+import { status } from "../../config/response.status.js";
+import { BaseError } from "../utils/BaseError.js";
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 
 export const UserModel = {
@@ -42,7 +44,6 @@ export const UserModel = {
     try {
       const email = signupInfo.email;
       const [result] = await pool.query(sql.checkIdOverlap, [email]);
-      console.log(result);
       if (result.length === 0) {
         await pool.query(sql.postNewUser, [
           signupInfo.email,
@@ -51,7 +52,7 @@ export const UserModel = {
         ]);
         return "회원가입 성공";
       } else {
-        throw new Error("이미 가입된 이메일입니다.");
+        throw new BaseError(status.setMessage(status.BAD_REQUEST, "이미 가입된 이메일입니다."));
       }
     } catch (error) {
       console.log(error);

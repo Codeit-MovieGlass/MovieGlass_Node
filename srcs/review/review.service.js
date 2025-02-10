@@ -39,5 +39,15 @@ export const ReviewService = {
       throw new Error("리뷰 삭제 실패");
     }
   },
+
+  getReviews: async ({ movie_id }) => {
+    try {
+      const reviews = await ReviewModel.selectReviews({ movie_id });
+      return reviews;
+    } catch (error) {
+      console.error("리뷰 조회 서비스 오류:", error);
+      throw new Error("리뷰 조회 실패");
+    }
+  },
 };
 

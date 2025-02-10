@@ -45,5 +45,16 @@ export const ReviewModel = {
       console.error("리뷰 삭제 오류:", error);
       throw new Error("리뷰 삭제 실패");
     }
-  }
+  },
+
+  selectReviews: async ({ movie_id }) => {
+    try {
+      const reviews = await pool.query(sql.selectReviews, [movie_id]);
+      return reviews[0];
+    } catch (error) {
+      console.error("리뷰 조회 오류:", error);
+      throw new Error("리뷰 조회 실패");
+    }
+  },
+
 };

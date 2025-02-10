@@ -19,5 +19,12 @@ export const sql = {
       DELETE FROM Review
       WHERE review_id = ?;
     `,
+
+
+    selectReviews: `
+      SELECT *
+      FROM Review
+      WHERE movie_id = ?;
+    `,
   };
   
