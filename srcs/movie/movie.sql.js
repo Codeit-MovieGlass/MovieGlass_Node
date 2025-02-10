@@ -115,8 +115,14 @@ getUserPreferences: `
   `,
   
   updateViewCount: `
-    INSERT INTO user_movie (user_id, movie_id, view_count)
+    INSERT INTO user_movie (movie_id, user_id, view_count)
     VALUES (?, ?, ?)
     ON DUPLICATE KEY UPDATE view_count = ?;
+  `,
+
+  getUserMovieInfo: `
+    SELECT liked, view_count
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
   `,
 };

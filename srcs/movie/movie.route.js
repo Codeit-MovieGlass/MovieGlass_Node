@@ -1,7 +1,7 @@
 import express from "express";
 import { top10Data, searchMovies } from "./movie.controller.js";
 import { uploadReview, updateReview, deleteReview, searchMovieReviews,  } from "../review/review.controller.js";
-import { getMovieInfo, updateLike, updateViewCount } from "./movie.controller.js";
+import { getMovieInfo, updateLike, updateViewCount ,getUserMovieInfo} from "./movie.controller.js";
 import authenticateToken from "../../config/jwt.middleware.js";
 
 export const movieRouter = express.Router();
@@ -12,6 +12,7 @@ movieRouter.get("/top10", top10Data);
 movieRouter.get("/search", searchMovies);
 
 movieRouter.get("/movieinfo", authenticateToken, getMovieInfo);
+movieRouter.get("/usermovieinfo", authenticateToken, getUserMovieInfo);
 
 
 movieRouter.post("/:movie_id/like", authenticateToken, updateLike);

@@ -95,6 +95,16 @@ export const MovieModel = {
     }
   },
 
+  getUserMovieInfo: async (user_id, movieId) => {
+    try {
+      const [rows] = await pool.query(sql.getUserMovieInfo, [user_id, movieId]);
+      return rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+      console.error("사용자 영화 정보 조회 오류:", error);
+      throw new Error("사용자 영화 정보 조회 실패");
+    }
+  },
+
   updateLike: async (movie_id, user_id) => {
     try {
       const [rows] = await pool.query(sql.updateLike, [movie_id, user_id]);

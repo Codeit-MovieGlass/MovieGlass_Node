@@ -40,6 +40,24 @@ export const searchMovies = async (req, res) => {
   }
 };
 
+export const getUserMovieInfo = async (req, res) => {
+  try {
+    const { movieId } = req.query;
+    const user_id = req.userId;
+    const userMovieInfo = await MovieService.getUserMovieInfo(user_id, movieId);
+
+    res.send(response(status.SUCCESS, {
+      userMovieInfo
+    }));
+  } catch (error) {
+    console.error("사용자 영화 정보 조회 오류:", error);
+    res.send(response(status.BAD_REQUEST, {
+      status: "fail",
+      message: "사용자 영화 정보 조회 중 오류가 발생했습니다."
+    }));
+  }
+}
+
 export const getMovieInfo = async (req, res) => {
   try {
     const { movieId } = req.query; 
@@ -50,6 +68,7 @@ export const getMovieInfo = async (req, res) => {
       }));
     }
     let movieInfo = await MovieService.getMovieInfo(movieId);
+
 
     if (movieInfo) {
       movieInfo = {

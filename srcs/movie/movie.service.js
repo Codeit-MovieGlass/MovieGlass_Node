@@ -43,6 +43,15 @@ export const MovieService = {
       throw new Error("영화 정보 조회 실패");
     }
   },
+  getUserMovieInfo: async (user_id, movieId) => {
+    try {
+      const userMovieInfo = await MovieModel.getUserMovieInfo(user_id, movieId);
+      return userMovieInfo;
+    } catch (error) {
+      console.error("사용자 영화 정보 조회 오류:", error);
+      throw new Error("사용자 영화 정보 조회 실패");
+    }
+  },
 
   updateLike: async (movie_id, user_id) => {
     try {
