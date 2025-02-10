@@ -15,8 +15,6 @@ export const UserModel = {
 
   findById: async (userId) => {
     try {
-      console.log(sql.findUserById);
-      console.log("userID:", userId);
       const [results] = await pool.query(sql.findUserById, [userId]);
       return results[0];
     } catch (error) {

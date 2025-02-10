@@ -36,6 +36,7 @@ export const UserService = {
   postUser: async (signupInfo) => {
     try {
       const { email, password, nickname } = signupInfo;
+      console.log(signupInfo);
 
       // 🔥 필수 입력값 체크
       if (!email || !password || !nickname) {
