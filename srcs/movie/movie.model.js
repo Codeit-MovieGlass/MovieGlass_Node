@@ -43,7 +43,7 @@ export const MovieModel = {
   // 검색어 기반 영화 검색
   getSearchResults: async (query) => {
     try {
-      const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
+      const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
         title: movie.movie_name,
@@ -61,7 +61,7 @@ export const MovieModel = {
       const [movies] = await pool.query(sql.recommendMovies, [
         `%${firstMovie.genre}%`,
         `%${firstMovie.keyword}%`,
-        `%${firstMovie.title.split(" ")[0]}%` // 제목의 첫 단어로 검색
+        `%${firstMovie.title.split(" ")[0]}%`, // 제목의 첫 단어로 검색
       ]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,

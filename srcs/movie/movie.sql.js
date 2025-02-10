@@ -31,11 +31,12 @@ searchMovies: `
     movie_name, 
     production_image,
     production_genre,
-    production_keyword
+    production_keyword,
   FROM Movie
   WHERE movie_name LIKE ? 
     OR production_genre LIKE ?
     OR production_keyword LIKE ?
+    or actors LIKE ?
 `,
 
 // 첫 번째 검색 결과를 기준으로 추천 영화 조회
