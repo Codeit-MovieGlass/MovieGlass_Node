@@ -100,4 +100,23 @@ getUserPreferences: `
     FROM Movie
     WHERE movie_id = ?;
   `,
+  
+  updateLike: `
+    INSERT INTO user_movie (user_id, movie_id, liked, view_count)
+    VALUES (?, ?, 1, 0)
+    ON DUPLICATE KEY UPDATE liked = IF(liked = 1, 0, 1);
+  `,
+
+  //좋아요 확인
+  checkLike: `
+    SELECT liked
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
+  `,
+  
+  updateViewCount: `
+    INSERT INTO user_movie (user_id, movie_id, view_count)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE view_count = ?;
+  `,
 };

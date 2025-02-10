@@ -43,6 +43,26 @@ export const MovieService = {
       throw new Error("영화 정보 조회 실패");
     }
   },
+
+  updateLike: async (movie_id, user_id) => {
+    try {
+      const like = await MovieModel.updateLike(movie_id, user_id);
+      return like;
+    } catch (error) {
+      console.error("좋아요 업데이트 오류:", error);
+      throw new Error("좋아요 업데이트 실패");
+    }
+  },
+
+  updateViewCount: async (movie_id, user_id, view_count) => {
+    try {
+      const viewCount = await MovieModel.updateViewCount(movie_id, user_id, view_count);
+      return viewCount;
+    } catch (error) {
+      console.error("조회수 업데이트 오류:", error);
+      throw new Error("조회수 업데이트 실패");
+    }
+  }
 };
 
 

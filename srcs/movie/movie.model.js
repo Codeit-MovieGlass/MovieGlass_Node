@@ -94,4 +94,26 @@ export const MovieModel = {
       throw new Error("영화 정보 조회 실패");
     }
   },
+
+  updateLike: async (movie_id, user_id) => {
+    try {
+      const [rows] = await pool.query(sql.updateLike, [movie_id, user_id]);
+      const [likes] = await pool.query(sql.checkLike, [movie_id, user_id]);
+
+      return likes[0].liked === 1;
+    } catch (error) {
+      console.error("좋아요 업데이트 오류:", error);
+      throw new Error("좋아요 업데이트 실패");
+    }
+  },
+
+  updateViewCount: async (movie_id, user_id, view_count) => {
+    try {
+      const [rows] = await pool.query(sql.updateViewCount, [movie_id, user_id, view_count, view_count]);
+      return view_count;
+    } catch (error) {
+      console.error("조회수 업데이트 오류:", error);
+      throw new Error("조회수 업데이트 실패");
+    }
+  },
 };

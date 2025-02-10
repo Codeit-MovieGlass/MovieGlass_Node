@@ -1,6 +1,7 @@
 import { MovieService } from "./movie.service.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
+import { PreferenceService } from "../preference/preference.service.js";
 
 // top10 데이터 가져오기
 export const top10Data = async (req, res) => {
@@ -73,6 +74,52 @@ export const getMovieInfo = async (req, res) => {
     res.send(response(status.BAD_REQUEST, {
       status: "fail",
       message: "영화 정보 조회 중 오류가 발생했습니다."
+    }));
+  }
+}
+export const updateLike = async (req, res) => {
+  try {
+    const { movie_id } = req.params;
+    const user_id = req.userId;
+    const result = await MovieService.updateLike(movie_id, user_id);
+    PreferenceService.updateUserPreferences({
+      user_id,
+      movie_id,
+      ratingDIf: result ? 3 : -3,
+    });
+    res.send(response(status.SUCCESS, {
+      success: result
+    }));
+  } catch (error) {
+    console.error("좋아요 업데이트 오류:", error);
+    res.send(response(status.BAD_REQUEST, {
+      status: "fail",
+      message: "좋아요 업데이트 중 오류가 발생했습니다."
+    }));
+  }
+}
+
+export const updateViewCount = async (req, res) => {
+  try {
+    const { movie_id } = req.params;
+    const user_id = req.userId;
+    const view_count = req.body.view_count;
+    const result = await MovieService.updateViewCount(movie_id, user_id, view_count);
+
+
+    PreferenceService.updateUserPreferences({
+      user_id,
+      movie_id,
+      ratingDIf: result, // TODO : 이전 조회수와 비교해서 차이 계산
+    });
+    res.send(response(status.SUCCESS, {
+      success: true
+    }));
+  } catch (error) {
+    console.error("조회수 업데이트 오류:", error);
+    res.send(response(status.BAD_REQUEST, {
+      status: "fail",
+      message: "조회수 업데이트 중 오류가 발생했습니다."
     }));
   }
 }
