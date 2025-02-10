@@ -4,6 +4,14 @@ import { sql } from "./review.sql.js";
 export const ReviewModel = {
   insertReview: async ({ user_id, movie_id, rating, review_comment, view_count }) => {
     try {
+      // 리뷰가 이미 존재하는지 확인
+      const [existReview] = await pool.query(sql.selectReviewByUser, [user_id, movie_id]);
+      if (existReview.length > 0) {
+        // 에러 메시지 추가
+        throw new Error("이미 리뷰가 존재합니다.");
+      }
+
+
       const [result] = await pool.query(sql.insertReview, [
         user_id,
         movie_id,

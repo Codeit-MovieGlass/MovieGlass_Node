@@ -4,6 +4,24 @@ import { sql } from "./curation.sql.js";
 export const CurationModel = {
   getEmotionCurations: async (emotion) => {
     try {
+      switch (emotion) {
+        case "사랑":
+          emotion = 21;
+          break;
+        case "평온":
+          emotion = 22;
+          break;
+        case "눈물":
+          emotion = 23;
+          break;
+        case "웃음":
+          emotion = 24;
+          break;
+        case "긴장":
+          emotion = 25;
+          break;
+      }
+      console.log(emotion);
       const [curations] = await pool.query(sql.getEmotionCurations, [emotion]);
       return curations.map((curation) => ({
         curationId: curation.curation_id,

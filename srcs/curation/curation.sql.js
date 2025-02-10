@@ -15,7 +15,7 @@ export const sql = {
   FROM Curation c
   JOIN CurationMovie cm ON c.curation_id = cm.curation_id
   JOIN Movie m ON cm.movie_id = m.movie_id
-  WHERE c.curation_type = ?
+  WHERE c.curation_id = ?
   GROUP BY c.curation_id;
   `,
 

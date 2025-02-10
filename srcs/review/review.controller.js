@@ -28,10 +28,9 @@ export const uploadReview = async (req, res) => {
       data: review
     }));
   } catch (error) {
-    console.error("리뷰 등록 오류:", error);
     res.send(response(status.BAD_REQUEST, {
       success: false,
-      message: "리뷰 등록 중 오류가 발생했습니다."
+      message: error.message || "리뷰 등록 중 오류가 발생했습니다."
     }));
   }
 };
