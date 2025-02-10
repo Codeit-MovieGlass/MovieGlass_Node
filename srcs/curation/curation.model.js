@@ -54,5 +54,35 @@ export const CurationModel = {
       console.error("큐레이션 셔플 조회 실패:", error);
       return [];
     }
+  },
+
+
+  getWeatherCurations: async (weather) => {
+    try { 
+      switch (weather) {
+        case "흐림":
+          weather = 26;
+          break;
+        case "맑음":
+          weather = 27;
+          break;
+        case "비":
+          weather = 28;
+          break;
+        case "눈":
+          weather = 29;
+          break;
+      }
+
+      const [curations] = await pool.query(sql.getWeatherCuration, [weather]);
+      return curations.map((curation) => ({
+        curation_id: curation.curation_id,
+        curation_name: curation.curation_name,
+        movies: curation.movies
+      }));
+    } catch (error) {
+      console.error("날씨 기반 큐레이션 조회 실패:", error);
+      return [];
+    }
   }
 };
