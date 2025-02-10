@@ -42,14 +42,28 @@ export const searchMovies = async (req, res) => {
 export const getMovieInfo = async (req, res) => {
   try {
     const { movieId } = req.query; 
-    console.log("movieId", movieId);
     if (!movieId) {
       return res.send(response(status.BAD_REQUEST, {
         status: "fail",
         message: "영화 ID(movieId) 값이 필요합니다."
       }));
     }
-    const movieInfo = await MovieService.getMovieInfo(movieId);
+    let movieInfo = await MovieService.getMovieInfo(movieId);
+
+    if (movieInfo) {
+      movieInfo = {
+        ...movieInfo,
+        production_genre: movieInfo.production_genre 
+          ? movieInfo.production_genre.split(', ').map(g => g.trim()) 
+          : [],
+        production_keyword: movieInfo.production_keyword 
+          ? movieInfo.production_keyword.split(', ').map(k => k.trim()) 
+          : [],
+        actors: movieInfo.actors 
+          ? movieInfo.actors.split(', ').map(a => a.trim()) 
+          : []
+      };
+    }
 
     res.send(response(status.SUCCESS, {
       movieInfo
