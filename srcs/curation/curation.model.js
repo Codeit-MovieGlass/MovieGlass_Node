@@ -21,7 +21,6 @@ export const CurationModel = {
           emotion = 25;
           break;
       }
-      console.log(emotion);
       const [curations] = await pool.query(sql.getEmotionCurations, [emotion]);
       return curations.map((curation) => ({
         curationId: curation.curation_id,

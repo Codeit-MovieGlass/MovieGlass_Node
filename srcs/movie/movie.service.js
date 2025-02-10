@@ -19,7 +19,6 @@ export const MovieService = {
     try {
       // 검색어 기반 영화 검색
       const searchResults = await MovieModel.getSearchResults(query);
-
       let recommendations = [];
       if (searchResults.length > 0) {
         // 첫 번째 검색 결과 영화 가져오기
