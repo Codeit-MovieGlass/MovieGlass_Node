@@ -1,6 +1,8 @@
 import { pool } from "../../config/db.js";
 import { sql } from "./user.sql.js";
 import jwt from "jsonwebtoken";
+import { status } from "../../config/response.status.js";
+import { BaseError } from "../utils/BaseError.js";
 const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 
 export const UserModel = {
@@ -42,6 +44,7 @@ export const UserModel = {
     const [rows] = await pool.query(sql.checkUserExists, [email, nickname]);
     return rows.length > 0 ? rows[0] : null;  // 결과가 있으면 중복
   },
+
 
   signup: async (signupInfo) => {
     try {

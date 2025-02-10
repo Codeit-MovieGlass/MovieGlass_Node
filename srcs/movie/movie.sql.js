@@ -36,6 +36,8 @@ searchMovies: `
   WHERE movie_name LIKE ? 
     OR production_genre LIKE ?
     OR production_keyword LIKE ?
+    or actors LIKE ?
+  LIMIT 10;
 `,
 
 // 첫 번째 검색 결과를 기준으로 추천 영화 조회
@@ -58,6 +60,71 @@ getMovieGenreAndKeyword: `
     production_keyword AS keyword
   FROM Movie
   WHERE movie_id = ?;
-`
+`,
 
+getUserPreferences: `
+  SELECT type, name, weight FROM user_preference_weights
+    WHERE user_id = ?
+    ORDER BY weight DESC;
+`,
+
+  getWeightedRecommendedMovies: `
+  SELECT 
+    m.movie_id AS id,
+    m.kmdb_id AS kmdbId,
+    m.movie_name AS movieName,
+    m.production_year AS productionYear,
+    m.production_genre AS productionGenre,
+    m.production_keyword AS productionKeyword,
+    m.production_country AS productionCountry,
+    m.production_image AS productionImage,
+    m.horizontal_image AS horizontalImage,
+    m.trailer_url AS trailerUrl,
+    IFNULL(AVG(r.rating), 0) AS rating,
+    COUNT(r.review_id) AS reviewCount, 
+    SUM(upw.weight) AS weightedScore
+  FROM Movie m
+  LEFT JOIN Review r ON m.movie_id = r.movie_id
+  LEFT JOIN user_preference_weights upw ON upw.user_id = ?
+    AND (
+      m.production_genre LIKE CONCAT('%', upw.name, '%') 
+      OR m.production_keyword LIKE CONCAT('%', upw.name, '%')
+    )
+  GROUP BY m.movie_id
+  ORDER BY weightedScore DESC, rating DESC, reviewCount DESC
+  LIMIT 10;
+  `,
+
+
+  getMovieInfo: `
+    SELECT
+      *
+    FROM Movie
+    WHERE movie_id = ?;
+  `,
+  
+  updateLike: `
+    INSERT INTO user_movie (user_id, movie_id, liked, view_count)
+    VALUES (?, ?, 1, 0)
+    ON DUPLICATE KEY UPDATE liked = IF(liked = 1, 0, 1);
+  `,
+
+  //좋아요 확인
+  checkLike: `
+    SELECT liked
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
+  `,
+  
+  updateViewCount: `
+    INSERT INTO user_movie (movie_id, user_id, view_count)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE view_count = ?;
+  `,
+
+  getUserMovieInfo: `
+    SELECT liked, view_count
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
+  `,
 };

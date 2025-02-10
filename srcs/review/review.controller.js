@@ -28,10 +28,9 @@ export const uploadReview = async (req, res) => {
       data: review
     }));
   } catch (error) {
-    console.error("리뷰 등록 오류:", error);
     res.send(response(status.BAD_REQUEST, {
       success: false,
-      message: "리뷰 등록 중 오류가 발생했습니다."
+      message: error.message || "리뷰 등록 중 오류가 발생했습니다."
     }));
   }
 };
@@ -95,6 +94,22 @@ export const deleteReview = async (req, res) => {
     res.send(response(status.BAD_REQUEST, {
       success: false,
       message: "리뷰 삭제 중 오류가 발생했습니다."
+    }));
+  }
+}
+
+export const searchMovieReviews = async (req, res) => {
+  try {
+    const { movie_id } = req.params;
+    const reviews = await ReviewService.getReviewsByMovie({ movie_id });
+    res.send(response(status.SUCCESS, {
+      data: reviews
+    }));
+  } catch (error) {
+    console.error("리뷰 조회 오류:", error);
+    res.send(response(status.BAD_REQUEST, {
+      success: false,
+      message: "리뷰 조회 중 오류가 발생했습니다."
     }));
   }
 }
