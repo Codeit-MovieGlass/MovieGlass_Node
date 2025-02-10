@@ -38,6 +38,7 @@ export const sql = {
     ORDER BY RAND()
     LIMIT 2;
   `,
+
   shuffleCurations: `
     SELECT 
         c.curation_id,
@@ -53,6 +54,7 @@ export const sql = {
     JOIN CurationMovie cm ON c.curation_id = cm.curation_id
     JOIN Movie m ON cm.movie_id = m.movie_id
     WHERE c.curation_id NOT IN (?)  -- 제외할 큐레이션 ID 리스트 추가
+      AND c.curation_id BETWEEN 1 AND 20  -- curation_id가 1~20인 경우에 대해서만
     GROUP BY c.curation_id
     ORDER BY RAND()
     LIMIT 3;
