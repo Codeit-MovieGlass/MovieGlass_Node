@@ -102,7 +102,7 @@ export const deleteReview = async (req, res) => {
 export const searchMovieReviews = async (req, res) => {
   try {
     const { movie_id } = req.params;
-    const reviews = await ReviewService.getReviews({ movie_id });
+    const reviews = await ReviewService.getReviewsByMovie({ movie_id });
     res.send(response(status.SUCCESS, {
       data: reviews
     }));

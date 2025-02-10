@@ -50,6 +50,7 @@ export const ReviewModel = {
   selectReviews: async ({ movie_id }) => {
     try {
       const reviews = await pool.query(sql.selectReviews, [movie_id]);
+      reviews[0].sort(() => Math.random() - 0.5);
       return reviews[0];
     } catch (error) {
       console.error("리뷰 조회 오류:", error);

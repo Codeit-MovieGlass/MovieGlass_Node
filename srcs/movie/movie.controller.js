@@ -5,8 +5,7 @@ import { status } from "../../config/response.status.js";
 // top10 데이터 가져오기
 export const top10Data = async (req, res) => {
   try {
-    const weather  = "맑음"; // TODO : 날씨 API 연동 후 수정
-    const top10Data = await MovieService.getTop10Data(weather);
+    const top10Data = await MovieService.getTop10Data(req);
     res.send(response(status.SUCCESS, {
       top10Data
     }));

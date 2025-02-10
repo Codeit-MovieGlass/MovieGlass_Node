@@ -1,9 +1,9 @@
 import { MovieModel } from "./movie.model.js";
 
 export const MovieService = {
-    getTop10Data: async (weather) => {
+    getTop10Data: async (req) => {
     try {
-      const top10Movies = await MovieModel.getTop10Movies();
+      const top10Movies = await MovieModel.getTop10Movies(req);
 
       return {
         top10Movies

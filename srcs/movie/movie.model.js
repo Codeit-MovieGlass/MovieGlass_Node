@@ -3,9 +3,22 @@ import { sql } from "./movie.sql.js";
 
 export const MovieModel = {
   // 사용자 맞춤 TOP 10 영화 가져오기
-  getTop10Movies: async () => {
+  getTop10Movies: async (req) => {
     try {
-      const [movies] = await pool.query(sql.getTop10Movies);
+      const user_id = req.userId;
+      const [preferences] = await pool.query(sql.getUserPreferences, [user_id]);
+
+      const genreWeights = {};
+      const keywordWeights = {};
+
+      preferences.forEach((pref) => {
+        if (pref.type === "GENRE") genreWeights[pref.name] = pref.weight;
+        if (pref.type === "KEYWORD") keywordWeights[pref.name] = pref.weight;
+      });
+
+      console.log(`사용자 ${user_id}의 장르 가중치:`, genreWeights);
+      console.log(`사용자 ${user_id}의 키워드 가중치:`, keywordWeights);
+      const [movies] = await pool.query(sql.getWeightedRecommendedMovies, [user_id, user_id]);
 
       return movies.map((movie) => ({
         id: movie.id,
@@ -17,7 +30,8 @@ export const MovieModel = {
         productionCountry: movie.productionCountry,
         productionImage: movie.productionImage,
         horizontalImage: movie.horizontalImage,
-        trailerUrl: movie.trailerUrl
+        trailerUrl: movie.trailerUrl,
+        weightedScore: movie.weightedScore
       }));
     } catch (error) {
       console.error("TOP 10 영화 조회 실패:", error);

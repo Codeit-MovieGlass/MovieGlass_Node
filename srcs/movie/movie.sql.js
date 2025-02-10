@@ -58,6 +58,38 @@ getMovieGenreAndKeyword: `
     production_keyword AS keyword
   FROM Movie
   WHERE movie_id = ?;
-`
+`,
 
+getUserPreferences: `
+  SELECT type, name, weight FROM user_preference_weights
+    WHERE user_id = ?
+    ORDER BY weight DESC;
+`,
+
+  getWeightedRecommendedMovies: `
+  SELECT 
+    m.movie_id AS id,
+    m.kmdb_id AS kmdbId,
+    m.movie_name AS movieName,
+    m.production_year AS productionYear,
+    m.production_genre AS productionGenre,
+    m.production_keyword AS productionKeyword,
+    m.production_country AS productionCountry,
+    m.production_image AS productionImage,
+    m.horizontal_image AS horizontalImage,
+    m.trailer_url AS trailerUrl,
+    IFNULL(AVG(r.rating), 0) AS rating,
+    COUNT(r.review_id) AS reviewCount, 
+    SUM(upw.weight) AS weightedScore
+  FROM Movie m
+  LEFT JOIN Review r ON m.movie_id = r.movie_id
+  LEFT JOIN user_preference_weights upw ON upw.user_id = ?
+    AND (
+      m.production_genre LIKE CONCAT('%', upw.name, '%') 
+      OR m.production_keyword LIKE CONCAT('%', upw.name, '%')
+    )
+  GROUP BY m.movie_id
+  ORDER BY weightedScore DESC, rating DESC, reviewCount DESC
+  LIMIT 10;
+  `
 };

@@ -40,7 +40,7 @@ export const ReviewService = {
     }
   },
 
-  getReviews: async ({ movie_id }) => {
+  getReviewsByMovie: async ({ movie_id }) => {
     try {
       const reviews = await ReviewModel.selectReviews({ movie_id });
       return reviews;

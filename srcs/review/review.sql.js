@@ -23,7 +23,7 @@ export const sql = {
 
     selectReviews: `
       SELECT *
-      FROM Review
+      FROM review
       WHERE movie_id = ?;
     `,
   };
