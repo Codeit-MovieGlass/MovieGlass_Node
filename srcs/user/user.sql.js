@@ -1,4 +1,5 @@
 export const sql = {
+  checkUserExists: `SELECT * FROM user WHERE email = ? OR nickname = ?`,
   findUserById: `SELECT user_id, nickname, provider, email, name, subscribe, profile_image_url FROM user WHERE user_id = ?`,
   updateNicknameSQL: `UPDATE user SET nickname = ? WHERE user_id = ?`,
   updateStatusSQL: `UPDATE user SET status = ? WHERE user_id = ?`,
