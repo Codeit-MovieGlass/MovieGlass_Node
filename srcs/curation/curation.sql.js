@@ -34,6 +34,7 @@ export const sql = {
     FROM Curation c
     JOIN CurationMovie cm ON c.curation_id = cm.curation_id
     JOIN Movie m ON cm.movie_id = m.movie_id
+    WHERE c.curation_id BETWEEN 1 AND 20
     GROUP BY c.curation_id
     ORDER BY RAND()
     LIMIT 2;

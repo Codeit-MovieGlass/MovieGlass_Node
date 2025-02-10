@@ -39,7 +39,8 @@ export const CurationModel = {
     try {
       let curations;
       
-      if (req.body && req.body.exCuration && Array.isArray(req.body.exCuration) && req.body.exCuration.length > 0) {
+      // 기존 큐레이션을 제외한 랜덤 큐레이션 가져오기
+      if (req.body && req.body.exCuration && req.body.exCuration.length > 0) {
         [curations] = await pool.query(sql.shuffleCurations, [req.body.exCuration]);
       } else {
         [curations] = await pool.query(sql.getTwoCurations);
