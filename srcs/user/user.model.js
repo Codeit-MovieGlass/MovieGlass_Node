@@ -6,11 +6,11 @@ const { JWT_SECRET, JWT_REFRESH_SECRET } = process.env;
 export const UserModel = {
   findUserByEmail: async (email) => {
     const [user] = await pool.query(
-        "SELECT user_id, email, password, social_id, provider, nickname, profile_image_url FROM user WHERE email = ?",
-        [email]
+      "SELECT user_id, email, password, social_id, provider, nickname, profile_image_url FROM user WHERE email = ?",
+      [email]
     );
     return user.length ? user[0] : null;
-},
+  },
 
 
   findById: async (userId) => {
@@ -40,20 +40,29 @@ export const UserModel = {
     }
   },
 
+  checkUserExists: async (email, nickname) => {
+    const [rows] = await pool.query(sql.checkUserExists, [email, nickname]);
+    return rows.length > 0 ? rows[0] : null;  // 결과가 있으면 중복
+  },
+
   signup: async (signupInfo) => {
     try {
-      const email = signupInfo.email;
-      const [result] = await pool.query(sql.checkIdOverlap, [email]);
-      if (result.length === 0) {
-        await pool.query(sql.postNewUser, [
-          signupInfo.email,
-          signupInfo.password,
-          signupInfo.nickname
-        ]);
-        return "회원가입 성공";
-      } else {
-        return "회원가입 실패";
+      const { email, password, nickname } = signupInfo;
+
+      // 🔥 이메일 또는 닉네임 중복 검사
+      const existingUser = await UserModel.checkUserExists(email, nickname);
+      if (existingUser) {
+        if (existingUser.email === email) {
+          throw new Error("이미 사용 중인 이메일입니다.");
+        }
+        if (existingUser.nickname === nickname) {
+          throw new Error("이미 사용 중인 닉네임입니다.");
+        }
       }
+
+      // 🔥 회원가입 진행
+      const [result] = await pool.query(sql.postNewUser, [email, password, nickname]);
+      return result.affectedRows > 0; // 회원가입 성공 여부 반환
     } catch (error) {
       console.log(error);
       throw new Error("회원 가입 실패");
@@ -61,24 +70,24 @@ export const UserModel = {
   },
   signupSocialUser: async (email, socialId, provider, nickname, profileImage) => {
     try {
-        const existingUser = await UserModel.findUserByEmail(email);
-        if (existingUser) {
-            if (existingUser.provider !== provider) {
-                throw new Error("이미 가입된 이메일입니다.");
-            }
-            return existingUser.user_id;
+      const existingUser = await UserModel.findUserByEmail(email);
+      if (existingUser) {
+        if (existingUser.provider !== provider) {
+          throw new Error("이미 가입된 이메일입니다.");
         }
+        return existingUser.user_id;
+      }
 
-        const [result] = await pool.query(
-            "INSERT INTO user (email, password, social_id, provider, nickname, profile_image_url) VALUES (?, NULL, ?, ?, ?, ?)",
-            [email, socialId, provider, nickname, profileImage]
-        );
+      const [result] = await pool.query(
+        "INSERT INTO user (email, password, social_id, provider, nickname, profile_image_url) VALUES (?, NULL, ?, ?, ?, ?)",
+        [email, socialId, provider, nickname, profileImage]
+      );
 
-        return result.insertId;
+      return result.insertId;
     } catch (error) {
-        throw new Error("소셜 회원가입 실패: " + error.message);
+      throw new Error("소셜 회원가입 실패: " + error.message);
     }
-},
+  },
 
   loginGeneral: async (loginInfo) => {
     try {

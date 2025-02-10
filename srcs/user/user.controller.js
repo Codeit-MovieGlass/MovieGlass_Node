@@ -70,14 +70,21 @@ export const userLogout = async (req, res) => {
   }
 };
 
-//회원가입
 export const signupUser = async (req, res) => {
   try {
-    const signupInfo = req.body;
-    const isSusccess = await UserService.postUser(signupInfo);
-    res.send(response(status.SUCCESS, singupUserDTO(isSusccess)));
+      const signupInfo = req.body;
+      const isSuccess = await UserService.postUser(signupInfo);
+
+      // ✅ 회원가입 성공 시 응답 반환
+      return res.send(response(status.SUCCESS, singupUserDTO(isSuccess)));
   } catch (error) {
-    res.send(response(status.BAD_REQUEST, errorResponseDTO("Invalid request")));
+      console.error("회원가입 에러:", error);
+
+      // ✅ 에러 메시지를 그대로 응답에 포함
+      return res.send(response(
+          status.BAD_REQUEST,
+          errorResponseDTO(error.message)  // 🔥 error.message 직접 반환
+      ));
   }
 };
 

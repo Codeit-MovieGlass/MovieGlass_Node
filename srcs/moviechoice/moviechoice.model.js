@@ -48,3 +48,21 @@ export const MovieKeywordModel = {
       }
     }
   };
+
+  export const MovieSelectionModel = {
+    saveSelectedMovies: async (userId, kmdbIds) => {
+      try {
+        if (kmdbIds.length < 3) {
+          throw new Error("최소 3개의 영화를 선택해야 합니다.");
+        }
+  
+        const values = kmdbIds.map((kmdbId) => [userId, kmdbId]); // ✅ 다중 삽입을 위한 데이터 변환
+        const [result] = await pool.query(sql.insertSelectedMovies, [values]);
+  
+        return result;
+      } catch (error) {
+        console.error("선택한 영화 저장 실패:", error);
+        throw error;
+      }
+    }
+  };
