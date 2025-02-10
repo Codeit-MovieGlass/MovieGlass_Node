@@ -15,14 +15,14 @@ export const CurationService = {
   shuffleCurations: async (req) => {
     try {
       const weather = req.body.weather; // TODO : 날씨 api 연동 후 수정
-      if (weather) {
-        // 날씨 기반 큐레이션 가져오기
-        const weatherCurations = await CurationModel.getWeatherCurations(weather);
-        return weatherCurations;
+      if (!weather) {
+        // 기존 큐레이션을 제외한 랜덤 큐레이션 가져오기
+        const shuffledCurations = await CurationModel.getShuffledCurations(req);
+        return shuffledCurations;
       }
-
-      // 기존 큐레이션을 제외한 랜덤 큐레이션 가져오기
       const shuffledCurations = await CurationModel.getShuffledCurations(req);
+      const weatherCurations = await CurationModel.getWeatherCurations(weather);
+      shuffledCurations.push(...weatherCurations);
       return shuffledCurations;
     } catch (error) {
       console.error("큐레이션 셔플 서비스 오류:", error);
