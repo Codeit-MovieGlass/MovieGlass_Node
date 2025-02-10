@@ -91,5 +91,13 @@ getUserPreferences: `
   GROUP BY m.movie_id
   ORDER BY weightedScore DESC, rating DESC, reviewCount DESC
   LIMIT 10;
-  `
+  `,
+
+
+  getMovieInfo: `
+    SELECT
+      *
+    FROM Movie
+    WHERE movie_id = ?;
+  `,
 };

@@ -32,7 +32,17 @@ export const MovieService = {
       console.error("영화 검색 서비스 오류:", error);
       throw new Error("영화 검색 서비스 실패");
     }
-  }
+  },
+
+  getMovieInfo: async (movieId) => {
+    try {
+      const movieInfo = await MovieModel.getMovieInfo(movieId);
+      return movieInfo;
+    } catch (error) {
+      console.error("영화 정보 조회 오류:", error);
+      throw new Error("영화 정보 조회 실패");
+    }
+  },
 };
 
 
