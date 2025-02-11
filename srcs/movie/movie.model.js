@@ -43,7 +43,7 @@ export const MovieModel = {
   // 검색어 기반 영화 검색
   getSearchResults: async (query) => {
     try {
-      const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
+      const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
         title: movie.movie_name,

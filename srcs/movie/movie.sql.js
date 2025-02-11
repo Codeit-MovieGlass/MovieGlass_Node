@@ -31,14 +31,19 @@ searchMovies: `
     movie_name, 
     production_image,
     production_genre,
-    production_keyword
+    production_keyword,
+    CASE 
+      WHEN movie_name LIKE ? THEN 1
+      ELSE 2 
+    END AS sort_order
   FROM Movie
-  WHERE movie_name LIKE ? 
-    OR production_genre LIKE ?
-    OR production_keyword LIKE ?
-    or actors LIKE ?
+  WHERE movie_name LIKE ?
+    OR FIND_IN_SET(?, REPLACE(production_genre, ', ', ',')) > 0
+    OR FIND_IN_SET(?, REPLACE(production_keyword, ', ', ',')) > 0
+    OR FIND_IN_SET(?, REPLACE(actors, ', ', ',')) > 0
   LIMIT 10;
 `,
+
 
 // 첫 번째 검색 결과를 기준으로 추천 영화 조회
 recommendMovies: `
