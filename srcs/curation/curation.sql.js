@@ -7,9 +7,9 @@ export const sql = {
       c.curation_type,
       JSON_ARRAYAGG(
       JSON_OBJECT(
-          'movieId', m.movie_id,
-          'title', m.movie_name,
-          'posterUrl', m.production_image,
+          'movie_id', m.movie_id,
+          'movie_name', m.movie_name,
+          'poster_url', m.production_image,
           'genre', m.production_genre,
           'keyword', m.production_keyword
       )

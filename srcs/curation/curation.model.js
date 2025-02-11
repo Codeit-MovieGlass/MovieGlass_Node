@@ -23,14 +23,15 @@ export const CurationModel = {
       }
       const [curations] = await pool.query(sql.getEmotionCurations, [emotion]);
 
-      await addAverageRatingToMovies(curations[0].movies);
-
+      await Promise.all(curations.map(async (curation) => {
+        await addAverageRatingToMovies(curation.movies);
+      }));
 
 
       return curations.map((curation) => ({
-        curationId: curation.curation_id,
-        curationName: curation.curation_name,
-        curationType: curation.curation_type,
+        curation_id: curation.curation_id,
+        curation_name: curation.curation_name,
+        curation_type: curation.curation_type,
         movies: curation.movies.map((movie) => ({
           ...movie,
           genre: movie.genre ? movie.genre.split(', ') : [],
@@ -54,8 +55,9 @@ export const CurationModel = {
       } else {
         [curations] = await pool.query(sql.getTwoCurations);
       }
-      await addAverageRatingToMovies(curations[0].movies);
-
+      await Promise.all(curations.map(async (curation) => {
+        await addAverageRatingToMovies(curation.movies);
+      }));
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
@@ -90,7 +92,9 @@ export const CurationModel = {
       }
 
       const [curations] = await pool.query(sql.getWeatherCuration, [weather]);
-      await addAverageRatingToMovies(curations[0].movies);
+      await Promise.all(curations.map(async (curation) => {
+        await addAverageRatingToMovies(curation.movies);
+      }));
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
