@@ -22,11 +22,11 @@ app.use(cors());
 
 //health
 app.use("/health", healthCheck);
-app.use("/api/users", userRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/movies", movieRouter);
-app.use("/api/moviechoice", moviechoiceRouter);
-app.use("/api/curations", curationRouter);
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
+app.use("/movies", movieRouter);
+app.use("/moviechoice", moviechoiceRouter);
+app.use("/curations", curationRouter);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
