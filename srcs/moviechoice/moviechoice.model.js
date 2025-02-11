@@ -12,7 +12,7 @@ export const MovieChoiceModel = {
       return movies.map((movie) => ({
         movie_id: movie.id,
         kmdb_id: movie.kmdbId,
-        title: movie.movieName,
+        movie_name: movie.movieName,
         production_year: movie.productionYear,
         genre: movie.productionGenre,
         country: movie.productionCountry,
@@ -34,7 +34,7 @@ export const MovieKeywordModel = {
         return movies.map((movie) => ({
           movie_id: movie.id,
           kmdb_id: movie.kmdbId,
-          title: movie.movieName,
+          movie_name: movie.movieName,
           production_year: movie.productionYear,
           genre: movie.productionGenre,
           country: movie.productionCountry,
