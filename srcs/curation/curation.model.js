@@ -31,7 +31,11 @@ export const CurationModel = {
         curationId: curation.curation_id,
         curationName: curation.curation_name,
         curationType: curation.curation_type,
-        movies: curation.movies
+        movies: curation.movies.map((movie) => ({
+          ...movie,
+          genre: movie.genre ? movie.genre.split(', ') : [],
+          keyword: movie.keyword ? movie.keyword.split(', ') : [],
+        })),
       }));
     } catch (error) {
       console.error("감정 기반 큐레이션 조회 실패:", error);
@@ -55,7 +59,11 @@ export const CurationModel = {
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
-        movies: curation.movies
+        movies: curation.movies.map((movie) => ({
+          ...movie,
+          genre: movie.genre ? movie.genre.split(', ') : [],
+          keyword: movie.keyword ? movie.keyword.split(', ') : [],
+        })),
       }));
     } catch (error) {
       console.error("큐레이션 셔플 조회 실패:", error);
@@ -86,7 +94,11 @@ export const CurationModel = {
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
-        movies: curation.movies
+        movies: curation.movies.map((movie) => ({
+          ...movie,
+          genre: movie.genre ? movie.genre.split(', ') : [],
+          keyword: movie.keyword ? movie.keyword.split(', ') : [],
+        })),
       }));
     } catch (error) {
       console.error("날씨 기반 큐레이션 조회 실패:", error);
