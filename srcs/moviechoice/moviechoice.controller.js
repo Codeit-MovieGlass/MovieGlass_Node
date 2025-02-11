@@ -22,17 +22,17 @@ export const MovieChoiceController = {
   },
   saveSelectedMoviesAndUpdatePreferences: async (req, res) => {
     try {
-      const { user_id, kmdbIds, ratingDIf } = req.body;
+      const { user_id, movie_id, ratingDIf } = req.body;
 
-      if (!user_id || !Array.isArray(kmdbIds) || kmdbIds.length < 3) {
+      if (!user_id || !Array.isArray(movie_id) || movie_id.length < 3) {
         return res.status(400).json({ success: false, message: "최소 3개의 영화 ID가 필요합니다." });
       }
 
       // ✅ 선택한 영화 저장 (기존 로직 유지)
-      await MovieChoiceService.saveSelectedMovies(user_id, kmdbIds);
+      await MovieChoiceService.saveSelectedMovies(user_id, movie_id);
 
       // ✅ 사용자 선호도 업데이트 (preference 연동)
-      await PreferenceService.updateUserPreferences({ user_id, kmdbIds, ratingDIf });
+      await PreferenceService.updateUserPreferences({ user_id, movie_id, ratingDIf });
 
       res.status(200).json({ success: true, message: "영화 선택 및 사용자 선호도 업데이트 성공" });
     } catch (error) {
