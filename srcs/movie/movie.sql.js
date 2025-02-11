@@ -50,7 +50,9 @@ recommendMovies: `
   SELECT 
     DISTINCT m.movie_id, 
     m.movie_name, 
-    m.production_image 
+    m.production_image,
+    m.production_genre,
+    m.production_keyword
   FROM Movie m
   WHERE m.production_genre LIKE ?
     OR m.production_keyword LIKE ?

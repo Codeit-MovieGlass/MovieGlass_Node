@@ -71,7 +71,9 @@ export const MovieModel = {
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
         title: movie.movie_name,
-        poster_url: movie.production_image
+        poster_url: movie.production_image,
+        genre: movie.production_genre,
+        keyword: movie.production_keyword
       }));
     } catch (error) {
       console.error("추천 영화 조회 실패:", error);
