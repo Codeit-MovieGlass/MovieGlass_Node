@@ -46,10 +46,10 @@ export const MovieModel = {
       const [movies] = await pool.query(sql.searchMovies, [`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
-        title: movie.movie_name,
+        movie_name: movie.movie_name,
         poster_url: movie.production_image,
-        genre: movie.production_genre,
-        keyword: movie.production_keyword
+        genre: movie.production_genre ? movie.production_genre.split(", ").map((g) => g.trim()) : [],
+        keyword: movie.production_keyword ? movie.production_keyword.split(", ").map((k) => k.trim()) : []
         }));
     } catch (error) {
       console.error("영화 검색 결과 조회 실패:", error);
@@ -61,19 +61,19 @@ export const MovieModel = {
 
   getRecommendations: async (firstMovie) => {
     try {
-      const genres = firstMovie.genre.split(", ").map((g) => `%${g.trim()}%`);
-      const keywords = firstMovie.keyword.split(", ").map((k) => `%${k.trim()}%`);
+      const genres = firstMovie.genre.map((g) => `%${g.trim()}%`);
+      const keywords = firstMovie.keyword.map((k) => `%${k.trim()}%`);
       const [movies] = await pool.query(sql.recommendMovies, [
         `${genres[0]}`,
         `${keywords[0]}`,
-        `%${firstMovie.title.split(" ")[0]}%`, // 제목의 첫 단어로 검색
+        `%${firstMovie.movie_name.split(" ")[0]}%`, // 제목의 첫 단어로 검색
       ]);
       return movies.map((movie) => ({
         movie_id: movie.movie_id,
-        title: movie.movie_name,
+        movie_name: movie.movie_name,
         poster_url: movie.production_image,
-        genre: movie.production_genre,
-        keyword: movie.production_keyword
+        genre: movie.production_genre ? movie.production_genre.split(", ").map((g) => g.trim()) : [],
+        keyword: movie.production_keyword ? movie.production_keyword.split(", ").map((k) => k.trim()) : []
       }));
     } catch (error) {
       console.error("추천 영화 조회 실패:", error);
