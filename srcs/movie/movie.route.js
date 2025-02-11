@@ -5,13 +5,16 @@ import { getMovieInfo, updateLike, updateViewCount ,getUserMovieInfo} from "./mo
 import authenticateToken from "../../config/jwt.middleware.js";
 
 export const movieRouter = express.Router();
+
+movieRouter.get("/movieinfo", getMovieInfo);
+movieRouter.get("/search", searchMovies);
+
+
 movieRouter.use(authenticateToken);
 
 
 movieRouter.get("/top10", top10Data);
-movieRouter.get("/search", searchMovies);
 
-movieRouter.get("/movieinfo", authenticateToken, getMovieInfo);
 movieRouter.get("/usermovieinfo", authenticateToken, getUserMovieInfo);
 
 
