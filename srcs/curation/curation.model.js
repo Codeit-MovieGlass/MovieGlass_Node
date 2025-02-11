@@ -22,6 +22,11 @@ export const CurationModel = {
           break;
       }
       const [curations] = await pool.query(sql.getEmotionCurations, [emotion]);
+
+      await addAverageRatingToMovies(curations[0].movies);
+
+
+
       return curations.map((curation) => ({
         curationId: curation.curation_id,
         curationName: curation.curation_name,
@@ -45,7 +50,8 @@ export const CurationModel = {
       } else {
         [curations] = await pool.query(sql.getTwoCurations);
       }
-  
+      await addAverageRatingToMovies(curations[0].movies);
+
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
@@ -76,6 +82,7 @@ export const CurationModel = {
       }
 
       const [curations] = await pool.query(sql.getWeatherCuration, [weather]);
+      await addAverageRatingToMovies(curations[0].movies);
       return curations.map((curation) => ({
         curation_id: curation.curation_id,
         curation_name: curation.curation_name,
@@ -85,5 +92,16 @@ export const CurationModel = {
       console.error("날씨 기반 큐레이션 조회 실패:", error);
       return [];
     }
+  }
+
+  
+};
+
+const addAverageRatingToMovies = async (movies) => {
+  if (!movies || movies.length === 0) return;
+
+  for (let movie of movies) {
+    const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
+    movie.averageRating = parseFloat(result[0].averageRating) || 0.0;
   }
 };

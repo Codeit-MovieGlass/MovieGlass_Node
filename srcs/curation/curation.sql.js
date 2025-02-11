@@ -9,7 +9,9 @@ export const sql = {
       JSON_OBJECT(
           'movieId', m.movie_id,
           'title', m.movie_name,
-          'posterUrl', m.production_image
+          'posterUrl', m.production_image,
+          'genre', m.production_genre,
+          'keyword', m.production_keyword
       )
       ) AS movies
   FROM Curation c
@@ -28,7 +30,9 @@ export const sql = {
         JSON_OBJECT(
           'movie_id', m.movie_id,
           'movie_name', m.movie_name,
-          'poster_url', m.production_image
+          'poster_url', m.production_image,
+          'genre', m.production_genre,
+          'keyword', m.production_keyword
         )
       ) AS movies
     FROM Curation c
@@ -48,7 +52,9 @@ export const sql = {
           JSON_OBJECT(
             'movie_id', m.movie_id,
             'movie_name', m.movie_name,
-            'poster_url', m.production_image
+            'poster_url', m.production_image,
+            'genre', m.production_genre,
+            'keyword', m.production_keyword
           )
         ) AS movies
     FROM Curation c
@@ -70,7 +76,9 @@ export const sql = {
           JSON_OBJECT(
             'movie_id', m.movie_id,
             'movie_name', m.movie_name,
-            'poster_url', m.production_image
+            'poster_url', m.production_image,
+            'genre', m.production_genre,
+            'keyword', m.production_keyword
           )
         ) AS movies
     FROM Curation c
@@ -80,5 +88,14 @@ export const sql = {
     GROUP BY c.curation_id
     ORDER BY RAND()
     LIMIT 3;
+    `,
+
+
+
+    getAverageRatingByMovieId: `
+    SELECT
+        COALESCE(ROUND(AVG(rating) * 2) / 2, 0.0) AS averageRating
+    FROM Review
+    WHERE movie_id = ?;
     `,
 };
