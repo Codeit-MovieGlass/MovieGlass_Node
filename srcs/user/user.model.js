@@ -50,7 +50,7 @@ export const UserModel = {
     try {
       const { email, password, nickname } = signupInfo;
 
-      // 🔥 이메일 또는 닉네임 중복 검사
+      // 🔍 이메일 또는 닉네임 중복 검사
       const existingUser = await UserModel.checkUserExists(email, nickname);
       if (existingUser) {
         if (existingUser.email === email) {
@@ -61,11 +61,16 @@ export const UserModel = {
         }
       }
 
-      // 🔥 회원가입 진행
+      // ✅ 회원가입 진행
       const [result] = await pool.query(sql.postNewUser, [email, password, nickname]);
-      return result.affectedRows > 0; // 회원가입 성공 여부 반환
+
+      if (result.affectedRows > 0) {
+        return { userId: result.insertId }; // ✅ 새로 생성된 user_id 반환
+      } else {
+        throw new Error("회원가입 실패");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("회원 가입 오류:", error);
       throw new Error("회원 가입 실패");
     }
   },
