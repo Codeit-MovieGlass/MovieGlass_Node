@@ -1,4 +1,4 @@
-import { pool } from "../../config/db.js"; // Named import로 변경
+import { pool } from "../../config/db.js";
 import queries from "./mypage.sql.js";
 
 // 1. 사용자 프로필 조회
