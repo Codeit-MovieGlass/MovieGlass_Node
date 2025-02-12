@@ -5,7 +5,7 @@ import {
   fetchUserReviews,
   fetchLikedMovies,
 } from "./mypage.model.js";
-import { response, errorResponse } from "../../config/response.js";
+import { responseData, errorResponse } from "../../config/response.js";
 import { pool } from "../../config/db.js";
 
 const authenticateUser = async (req) => {
@@ -44,7 +44,7 @@ export const getProfile = async (req, res) => {
         .json(errorResponse("프로필 정보를 찾을 수 없습니다."));
     }
 
-    res.status(200).json(response(profile));
+    res.status(200).json(responseData(profile));
   } catch (error) {
     console.error(error);
     res.status(401).json(errorResponse(error.message));
@@ -61,7 +61,7 @@ export const updateProfile = async (req, res) => {
 
     await updateProfileInDB(userId, nickname, profileImage);
 
-    res.status(200).json(response("프로필이 성공적으로 업데이트되었습니다."));
+    res.status(200).json(responseData("프로필이 성공적으로 업데이트되었습니다."));
   } catch (error) {
     console.error(error);
     res.status(401).json(errorResponse(error.message));
@@ -77,7 +77,7 @@ export const getCalendarData = async (req, res) => {
     const { year, month } = req.query;
     const calendarData = await fetchCalendarData(userId, year, month);
 
-    res.status(200).json(response(calendarData));
+    res.status(200).json(responseData(calendarData));
   } catch (error) {
     console.error(error);
     res.status(401).json(errorResponse(error.message));
@@ -92,7 +92,7 @@ export const getUserReviews = async (req, res) => {
     const userId = req.user.id;
     const reviews = await fetchUserReviews(userId);
 
-    res.status(200).json(response(reviews));
+    res.status(200).json(responseData(reviews));
   } catch (error) {
     console.error(error);
     res.status(401).json(errorResponse(error.message));
@@ -107,7 +107,7 @@ export const getLikedMovies = async (req, res) => {
     const userId = req.user.id;
     const likedMovies = await fetchLikedMovies(userId);
 
-    res.status(200).json(response(likedMovies));
+    res.status(200).json(responseData(likedMovies));
   } catch (error) {
     console.error(error);
     res.status(401).json(errorResponse(error.message));
