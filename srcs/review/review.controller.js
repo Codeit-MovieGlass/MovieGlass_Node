@@ -28,7 +28,7 @@ export const uploadReview = async (req, res) => {
       data: review
     }));
   } catch (error) {
-    res.send(responseData(status.BAD_REQUEST, {
+    res.send(responseData({
       success: false,
       message: error.message || "리뷰 등록 중 오류가 발생했습니다."
     }));
@@ -93,7 +93,7 @@ export const deleteReview = async (req, res) => {
     console.error("리뷰 삭제 오류:", error);
     res.send(responseData(status.BAD_REQUEST, {
       success: false,
-      message: "리뷰 삭제 중 오류가 발생했습니다."
+      message: error.message || "리뷰 삭제 중 오류가 발생했습니다."
     }));
   }
 }

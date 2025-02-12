@@ -23,6 +23,13 @@ export const sql = {
     LIMIT 10;
   `,
 
+  getAverageRatingByMovieId: `
+  SELECT
+      COALESCE(ROUND(AVG(rating) * 2) / 2, 0.0) AS averageRating
+  FROM Review
+  WHERE movie_id = ?;
+  `,
+
 
 // 검색어 기반 영화 검색 (제목, 인물, 키워드, 장르 포함)
 searchMovies: `

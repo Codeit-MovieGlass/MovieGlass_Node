@@ -1,6 +1,19 @@
 import { pool } from "../../config/db.js";
 import { sql } from "./movie.sql.js";
 
+
+
+
+
+const addAverageRatingToMovies = async (movies) => {
+  if (!movies || movies.length === 0) return;
+
+  for (let movie of movies) {
+    const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
+    movie.averageRating = parseFloat(result[0].averageRating) || 0.0;
+  }
+};
+
 export const MovieModel = {
   // 사용자 맞춤 TOP 10 영화 가져오기
   getTop10Movies: async (req) => {
@@ -20,6 +33,12 @@ export const MovieModel = {
       console.log(`사용자 ${user_id}의 키워드 가중치:`, keywordWeights);
       const [movies] = await pool.query(sql.getWeightedRecommendedMovies, [user_id, user_id]);
 
+      const averageRating = await Promise.all(movies.map(async (movie) => {
+        const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
+        return parseFloat(result[0].averageRating) || 0.0;
+      }));
+
+      await addAverageRatingToMovies(movies);
       return movies.map((movie) => ({
         id: movie.id,
         kmdbId: movie.kmdbId,
@@ -31,7 +50,8 @@ export const MovieModel = {
         productionImage: movie.productionImage,
         horizontalImage: movie.horizontalImage,
         trailerUrl: movie.trailerUrl,
-        weightedScore: movie.weightedScore
+        weightedScore: movie.weightedScore,
+        averageRating: movie.averageRating,
       }));
     } catch (error) {
       console.error("TOP 10 영화 조회 실패:", error);
