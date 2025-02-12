@@ -3,10 +3,11 @@ import { response } from "./config/response.js";
 import { healthCheck } from "./srcs/utils/healthCheck.js";
 import cors from "cors";
 import { userRouter } from "./srcs/user/user.route.js";
-import  authRouter  from "./srcs/auth/auth.route.js";
-import  curationRouter  from "./srcs/curation/curation.route.js";
-import  movieRouter  from "./srcs/movie/movie.route.js";
-import  moviechoiceRouter  from "./srcs/moviechoice/moviechoice.route.js";
+import authRouter from "./srcs/auth/auth.route.js";
+import curationRouter from "./srcs/curation/curation.route.js";
+import movieRouter from "./srcs/movie/movie.route.js";
+import moviechoiceRouter from "./srcs/moviechoice/moviechoice.route.js";
+import { mypageRouter } from "./srcs/mypage/mypage.route.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -19,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cors());
 
-
 //health
 app.use("/health", healthCheck);
 app.use("/api/users", userRouter);
@@ -27,6 +27,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/moviechoice", moviechoiceRouter);
 app.use("/api/curations", curationRouter);
+app.use("/api/mypage", mypageRouter);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
