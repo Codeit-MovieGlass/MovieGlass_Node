@@ -31,19 +31,28 @@ searchMovies: `
     movie_name, 
     production_image,
     production_genre,
-    production_keyword
+    production_keyword,
+    CASE 
+      WHEN movie_name LIKE ? THEN 1
+      ELSE 2 
+    END AS sort_order
   FROM Movie
-  WHERE movie_name LIKE ? 
-    OR production_genre LIKE ?
-    OR production_keyword LIKE ?
+  WHERE movie_name LIKE ?
+    OR FIND_IN_SET(?, REPLACE(production_genre, ', ', ',')) > 0
+    OR FIND_IN_SET(?, REPLACE(production_keyword, ', ', ',')) > 0
+    OR FIND_IN_SET(?, REPLACE(actors, ', ', ',')) > 0
+  LIMIT 10;
 `,
+
 
 // 첫 번째 검색 결과를 기준으로 추천 영화 조회
 recommendMovies: `
   SELECT 
     DISTINCT m.movie_id, 
     m.movie_name, 
-    m.production_image 
+    m.production_image,
+    m.production_genre,
+    m.production_keyword
   FROM Movie m
   WHERE m.production_genre LIKE ?
     OR m.production_keyword LIKE ?
@@ -58,6 +67,71 @@ getMovieGenreAndKeyword: `
     production_keyword AS keyword
   FROM Movie
   WHERE movie_id = ?;
-`
+`,
 
+getUserPreferences: `
+  SELECT type, name, weight FROM user_preference_weights
+    WHERE user_id = ?
+    ORDER BY weight DESC;
+`,
+
+  getWeightedRecommendedMovies: `
+  SELECT 
+    m.movie_id AS id,
+    m.kmdb_id AS kmdbId,
+    m.movie_name AS movieName,
+    m.production_year AS productionYear,
+    m.production_genre AS productionGenre,
+    m.production_keyword AS productionKeyword,
+    m.production_country AS productionCountry,
+    m.production_image AS productionImage,
+    m.horizontal_image AS horizontalImage,
+    m.trailer_url AS trailerUrl,
+    IFNULL(AVG(r.rating), 0) AS rating,
+    COUNT(r.review_id) AS reviewCount, 
+    SUM(upw.weight) AS weightedScore
+  FROM Movie m
+  LEFT JOIN Review r ON m.movie_id = r.movie_id
+  LEFT JOIN user_preference_weights upw ON upw.user_id = ?
+    AND (
+      m.production_genre LIKE CONCAT('%', upw.name, '%') 
+      OR m.production_keyword LIKE CONCAT('%', upw.name, '%')
+    )
+  GROUP BY m.movie_id
+  ORDER BY weightedScore DESC, rating DESC, reviewCount DESC
+  LIMIT 10;
+  `,
+
+
+  getMovieInfo: `
+    SELECT
+      *
+    FROM Movie
+    WHERE movie_id = ?;
+  `,
+  
+  updateLike: `
+    INSERT INTO user_movie (user_id, movie_id, liked, view_count)
+    VALUES (?, ?, 1, 0)
+    ON DUPLICATE KEY UPDATE liked = IF(liked = 1, 0, 1);
+  `,
+
+  //좋아요 확인
+  checkLike: `
+    SELECT liked
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
+  `,
+  
+  updateViewCount: `
+    INSERT INTO user_movie (movie_id, user_id, view_count)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE view_count = ?;
+  `,
+
+  getUserMovieInfo: `
+    SELECT liked, view_count
+    FROM user_movie
+    WHERE user_id = ? AND movie_id = ?;
+  `,
 };

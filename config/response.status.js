@@ -74,4 +74,7 @@ export const status = {
     code: "COMMON005",
     message: "데이터를 찾을 수 없습니다.",
   },
+  setMessage(baseStatus, newMessage) {
+    return { ...baseStatus, message: newMessage };
+  },
 };

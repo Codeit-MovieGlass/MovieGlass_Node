@@ -38,13 +38,28 @@ export const UserService = {
       const { email, password, nickname } = signupInfo;
       console.log(signupInfo);
 
-      //이름, 아이디, 패스워드가 모두 있으면
-      if (email && password && nickname) {
-        const isSusccess = await UserModel.signup(signupInfo);
-        return isSusccess;
+      // 🔥 필수 입력값 체크
+      if (!email || !password || !nickname) {
+        throw new BaseError(status.BAD_REQUEST, "필수 정보를 입력해주세요.");
       }
+
+      // 🔥 중복 검사
+      const existingUser = await UserModel.checkUserExists(email, nickname);
+      if (existingUser) {
+        if (existingUser.email === email) {
+          throw new BaseError(status.BAD_REQUEST, "이미 사용 중인 이메일입니다.");
+        }
+        if (existingUser.nickname === nickname) {
+          throw new BaseError(status.BAD_REQUEST, "이미 사용 중인 닉네임입니다.");
+        }
+      }
+
+      // 🔥 회원가입 실행
+      const isSuccess = await UserModel.signup(signupInfo);
+      return isSuccess;
     } catch (error) {
-      throw new BaseError(status.BAD_REQUEST, "회원가입 실패");
+      console.error("회원가입 실패:", error);
+      throw error; // ✅ 에러를 그대로 throw하여 컨트롤러에서 캐치할 수 있도록 함
     }
   },
 

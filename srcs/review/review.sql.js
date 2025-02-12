@@ -9,6 +9,11 @@ export const sql = {
       FROM Review
       WHERE review_id = ?;
     `,
+    selectReviewByUser: `
+      SELECT *
+      FROM Review
+      WHERE user_id = ? AND movie_id = ?;
+    `,
 
     updateReview: `
       UPDATE Review
@@ -18,6 +23,13 @@ export const sql = {
     deleteReview: `
       DELETE FROM Review
       WHERE review_id = ?;
+    `,
+
+
+    selectReviews: `
+      SELECT *
+      FROM review
+      WHERE movie_id = ?;
     `,
   };
   

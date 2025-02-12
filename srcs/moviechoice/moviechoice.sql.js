@@ -29,5 +29,9 @@ export const sql = {
       production_keyword AS productionKeyword
     FROM Movie
     WHERE production_keyword LIKE ?;
+  `,
+  insertSelectedMovies: `
+    INSERT INTO SelectedMovies (user_id, kmdb_id)
+    VALUES ?;
   `
 };

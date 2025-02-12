@@ -7,6 +7,7 @@ import authRouter from "./srcs/auth/auth.route.js";
 import curationRouter from "./srcs/curation/curation.route.js";
 import movieRouter from "./srcs/movie/movie.route.js";
 import moviechoiceRouter from "./srcs/moviechoice/moviechoice.route.js";
+import aichatRouter from "./srcs/aichat/aichat.route.js";
 import { mypageRouter } from "./srcs/mypage/mypage.route.js";
 import dotenv from "dotenv";
 dotenv.config();
@@ -22,11 +23,12 @@ app.use(cors());
 
 //health
 app.use("/health", healthCheck);
-app.use("/api/users", userRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/movies", movieRouter);
-app.use("/api/moviechoice", moviechoiceRouter);
-app.use("/api/curations", curationRouter);
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
+app.use("/movies", movieRouter);
+app.use("/moviechoice", moviechoiceRouter);
+app.use("/curations", curationRouter);
+app.use("/aichat", aichatRouter);
 app.use("/api/mypage", mypageRouter);
 
 app.use((err, req, res, next) => {
