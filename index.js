@@ -7,6 +7,7 @@ import  authRouter  from "./srcs/auth/auth.route.js";
 import  curationRouter  from "./srcs/curation/curation.route.js";
 import  movieRouter  from "./srcs/movie/movie.route.js";
 import  moviechoiceRouter  from "./srcs/moviechoice/moviechoice.route.js";
+import  aichatRouter  from "./srcs/aichat/aichat.route.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use("/auth", authRouter);
 app.use("/movies", movieRouter);
 app.use("/moviechoice", moviechoiceRouter);
 app.use("/curations", curationRouter);
+app.use("/aichat", aichatRouter);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
