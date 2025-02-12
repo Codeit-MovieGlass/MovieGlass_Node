@@ -78,17 +78,19 @@ const kakaoLogin = async (code) => {
 
         let user = await getUserBySocialId(providerId, "kakao");
         let userId;
+        let isNewUser = false;
+
         if (user) {
             userId = user.user_id;
         } else {
-            userId = await signUpSocialUser(email, providerId, "kakao", profileImage);  // ✅ 수정됨: signUp → signUpSocialUser로 변경
+            userId = await signUpSocialUser(email, providerId, "kakao", profileImage);
+            isNewUser = true;
         }
 
-        const { accessToken, refreshToken } = generateTokens(userId, "kakao", email);  // ✅ 수정됨: providerId → "kakao"
-
+        const { accessToken, refreshToken } = generateTokens(userId, "kakao", email);
         await updateRefreshToken(userId, refreshToken);
 
-        return { accessToken, refreshToken, userInfo: { email, nickname, profileImage } };
+        return { accessToken, refreshToken, userInfo: { email, nickname, profileImage }, isNewUser };
     } catch (error) {
         console.error("카카오 로그인 실패:", error);
         throw new Error("카카오 로그인 중 오류 발생");
@@ -156,7 +158,7 @@ const naverLogin = async (code) => {
 
 const googleLogin = async (code) => {
     try {
-        // 1. Google OAuth API로 access_token 요청
+        // 1️⃣ 구글 OAuth API로 access_token 요청
         const tokenResponse = await axios.post(
             "https://oauth2.googleapis.com/token",
             {
@@ -173,7 +175,7 @@ const googleLogin = async (code) => {
         console.log("구글 access_token:", access_token);
         console.log("구글 id_token:", id_token);
 
-        // 2. access_token으로 구글 유저 정보 가져오기
+        // 2️⃣ access_token으로 구글 유저 정보 가져오기
         const userResponse = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
             headers: { Authorization: `Bearer ${access_token}` },
         });
@@ -181,7 +183,7 @@ const googleLogin = async (code) => {
         const googleUser = userResponse.data;
         console.log("구글 유저 정보:", googleUser);
 
-        // 3. 유저 정보 추출
+        // 3️⃣ 유저 정보 추출
         const providerId = googleUser.sub;
         const email = googleUser.email;
         const nickname = googleUser.name || `GoogleUser${providerId}`;
@@ -191,25 +193,28 @@ const googleLogin = async (code) => {
             throw new Error("KEY_ERROR: 필수 정보가 없습니다.");
         }
 
-        // 4. DB에서 유저 확인 (없으면 회원가입)
+        // 4️⃣ DB에서 유저 확인 (없으면 회원가입)
         let user = await getUserBySocialId(providerId, "google");
         let userId;
+        let isNewUser = false; // 기본값: 기존 회원
+
         if (user) {
             userId = user.user_id;
         } else {
             userId = await signUpSocialUser(email, providerId, "google", nickname, profileImage);
+            isNewUser = true; // 신규 회원으로 설정
         }
 
-        // 5. JWT 토큰 생성
+        // 5️⃣ JWT 토큰 생성
         const { accessToken, refreshToken } = generateTokens(userId, "google", email);
 
-        // 6. 리프레시 토큰 저장
+        // 6️⃣ 리프레시 토큰 저장
         await updateRefreshToken(userId, refreshToken);
 
-        return { accessToken, refreshToken, userInfo: { email, nickname, profileImage } };
+        return { accessToken, refreshToken, userInfo: { email, nickname, profileImage }, isNewUser };
     } catch (error) {
         console.error("구글 로그인 실패:", error);
-        throw new Error("google login failed");
+        throw new Error("구글 로그인 중 오류 발생");
     }
 };
 

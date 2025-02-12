@@ -22,7 +22,8 @@ export const MovieChoiceController = {
   },
   saveSelectedMoviesAndUpdatePreferences: async (req, res) => {
     try {
-      const { user_id, movie_id, ratingDIf } = req.body;
+      const { user_id, movie_id } = req.body;
+      const ratingDIf = 5;
 
       if (!user_id || !Array.isArray(movie_id) || movie_id.length < 3) {
         return res.status(400).json({ success: false, message: "최소 3개의 영화 ID가 필요합니다." });
