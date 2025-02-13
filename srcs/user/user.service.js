@@ -42,17 +42,17 @@ export const UserService = {
       // 🔥 필수 입력값 체크
       if (!email || !password || !nickname) {
         console.log("필수 정보를 입력해주세요.");
-        throw new BaseError(status.setMessage(status.BAD_REQUEST, "필수 정보를 입력해주세요."));
+        throw new BaseError(status.BAD_REQUEST(status.BAD_REQUEST, "필수 정보를 입력해주세요."));
       }
 
       // 🔥 중복 검사
       const existingUser = await UserModel.checkUserExists(email, nickname);
       if (existingUser) {
         if (existingUser.email === email) {
-          throw new BaseError(status.setMessage(status.BAD_REQUEST, "이미 사용 중인 이메일입니다."));
+          throw new BaseError(status.BAD_REQUEST(status.BAD_REQUEST, "이미 사용 중인 이메일입니다."));
         }
         if (existingUser.nickname === nickname) {
-          throw new BaseError(status.setMessage(status.BAD_REQUEST, "이미 사용 중인 닉네임입니다."));
+          throw new BaseError(status.BAD_REQUEST(status.BAD_REQUEST, "이미 사용 중인 닉네임입니다."));
         }
       }
 
