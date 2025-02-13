@@ -26,7 +26,7 @@ app.use("/movies", movieRouter);
 app.use("/moviechoice", moviechoiceRouter);
 app.use("/curations", curationRouter);
 app.use("/aichat", aichatRouter);
-app.use("/api/mypage", mypageRouter);
+app.use("/mypage", mypageRouter);
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;

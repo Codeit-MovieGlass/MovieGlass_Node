@@ -6,8 +6,10 @@ import {
   getUserReviews,
   getLikedMovies,
 } from "./mypage.controller.js";
+import authenticateToken from "../../config/jwt.middleware.js";
 
 const router = express.Router();
+router.use(authenticateToken);
 
 router.get("/profile", getProfile);
 router.put("/profile", updateProfile);
