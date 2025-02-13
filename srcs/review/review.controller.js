@@ -25,7 +25,7 @@ export const uploadReview = async (req, res) => {
       ratingDIf: review.rating
     });
 
-    res.send(responseData(status.SUCCESS, review));
+    res.send(response(status.SUCCESS, review));
   } catch (error) {
     res.send(responseData({
       success: false,
@@ -50,6 +50,7 @@ export const updateReview = async (req, res) => {
       review_comment,
       view_count
     });
+    console.log("review", review);
 
     await PreferenceService.updateUserPreferences({
       user_id: review.user_id,
@@ -57,7 +58,7 @@ export const updateReview = async (req, res) => {
       ratingDIf: review.rating-exRating.rating
     });
 
-    res.send(responseData(status.SUCCESS, review));
+    res.send(response(status.SUCCESS, review));
   } catch (error) {
     console.error("리뷰 수정 오류:", error);
     res.send(responseData(status.BAD_REQUEST, {
@@ -83,13 +84,12 @@ export const deleteReview = async (req, res) => {
       ratingDIf: -exRating.rating
     });
 
-    res.send(responseData(status.SUCCESS, "리뷰 삭제 성공"));
+    res.send(response(status.SUCCESS, "리뷰 삭제 성공"));
   } catch (error) {
     console.error("리뷰 삭제 오류:", error);
-    res.send(responseData(status.BAD_REQUEST, {
-      success: false,
-      message: error.message || "리뷰 삭제 중 오류가 발생했습니다."
-    }));
+    res.send(response(status.BAD_REQUEST, 
+      error.message || "리뷰 삭제 중 오류가 발생했습니다."
+    ));
   }
 }
 
@@ -97,7 +97,8 @@ export const searchMovieReviews = async (req, res) => {
   try {
     const { movie_id } = req.params;
     const reviews = await ReviewService.getReviewsByMovie({ movie_id });
-    res.send(responseData(status.SUCCESS, reviews));
+    console.log("reviews", reviews);
+    res.send(response(status.SUCCESS, reviews));
   } catch (error) {
     console.error("리뷰 조회 오류:", error);
     res.send(responseData(status.BAD_REQUEST, "리뷰 조회 중 오류가 발생했습니다."));
