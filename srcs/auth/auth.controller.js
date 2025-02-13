@@ -6,7 +6,7 @@ import {
     refreshTokens
 } from "./auth.service.js";
 import { response } from "../../config/response.js";
-import { status } from "../../config/response.status.js";
+import status from "../../config/response.status.js";
 import { 
     authResponseDTO, 
     tokenRefreshResponseDTO, 

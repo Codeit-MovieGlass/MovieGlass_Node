@@ -1,4 +1,4 @@
-import { status } from "../../config/response.status.js";
+import status from "../../config/response.status.js";
 import { response } from "../../config/response.js";
 import { UserService } from "./user.service.js";
 import {
@@ -95,6 +95,7 @@ export const loginUser = async (req, res) => {
     const token = await UserService.loginGeneral(loginInfo);
     res.send(response(status.SUCCESS, loginUserDTO(token)));
   } catch (error) {
-    res.send(response(status.BAD_REQUEST, errorResponseDTO("Invalid request")));
+    console.log(error);
+    res.send(response(status.BAD_REQUEST, "로그인 실패"));
   }
 };

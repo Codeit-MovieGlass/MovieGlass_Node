@@ -1,4 +1,5 @@
 export const response = ({ isSuccess, code, message }, result) => {
+  console.log("response 호출됨:", { isSuccess, code, message, result });
   return {
     isSuccess: isSuccess,
     code: code,

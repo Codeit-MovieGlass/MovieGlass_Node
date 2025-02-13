@@ -1,6 +1,5 @@
 import express from "express"; // ES6
 import { response } from "./config/response.js";
-import { healthCheck } from "./srcs/utils/healthCheck.js";
 import cors from "cors";
 import { userRouter } from "./srcs/user/user.route.js";
 import authRouter from "./srcs/auth/auth.route.js";
@@ -21,8 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cors());
 
-//health
-app.use("/health", healthCheck);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/movies", movieRouter);

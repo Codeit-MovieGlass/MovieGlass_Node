@@ -1,7 +1,8 @@
 import { ReviewService } from "./review.service.js";
 import { responseData } from "../../config/response.js";
-import { status } from "../../config/response.status.js";
 import { PreferenceService } from "../preference/preference.service.js";
+import status from "../../config/response.status.js";
+import { response } from "../../config/response.js";
 
 // 리뷰 등록 API
 export const uploadReview = async (req, res) => {
@@ -24,9 +25,7 @@ export const uploadReview = async (req, res) => {
       ratingDIf: review.rating
     });
 
-    res.send(responseData(status.SUCCESS, {
-      data: review
-    }));
+    res.send(responseData(status.SUCCESS, review));
   } catch (error) {
     res.send(responseData({
       success: false,
@@ -58,9 +57,7 @@ export const updateReview = async (req, res) => {
       ratingDIf: review.rating-exRating.rating
     });
 
-    res.send(responseData(status.SUCCESS, {
-      data: review
-    }));
+    res.send(responseData(status.SUCCESS, review));
   } catch (error) {
     console.error("리뷰 수정 오류:", error);
     res.send(responseData(status.BAD_REQUEST, {
@@ -86,9 +83,7 @@ export const deleteReview = async (req, res) => {
       ratingDIf: -exRating.rating
     });
 
-    res.send(responseData(status.SUCCESS, {
-      data: "리뷰 삭제 성공"
-    }));
+    res.send(responseData(status.SUCCESS, "리뷰 삭제 성공"));
   } catch (error) {
     console.error("리뷰 삭제 오류:", error);
     res.send(responseData(status.BAD_REQUEST, {
@@ -102,14 +97,9 @@ export const searchMovieReviews = async (req, res) => {
   try {
     const { movie_id } = req.params;
     const reviews = await ReviewService.getReviewsByMovie({ movie_id });
-    res.send(responseData(status.SUCCESS, {
-      data: reviews
-    }));
+    res.send(responseData(status.SUCCESS, reviews));
   } catch (error) {
     console.error("리뷰 조회 오류:", error);
-    res.send(responseData(status.BAD_REQUEST, {
-      success: false,
-      message: "리뷰 조회 중 오류가 발생했습니다."
-    }));
+    res.send(responseData(status.BAD_REQUEST, "리뷰 조회 중 오류가 발생했습니다."));
   }
 }

@@ -1,5 +1,5 @@
 import { BaseError } from "../../config/error.js";
-import { status } from "../../config/response.status.js";
+import status from "../../config/response.status.js";
 import { userLogout } from "./user.controller.js";
 import { UserModel } from "./user.model.js";
 

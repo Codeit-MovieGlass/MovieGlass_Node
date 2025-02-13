@@ -1,6 +1,6 @@
 import { MovieService } from "./movie.service.js";
 import { response } from "../../config/response.js";
-import { status } from "../../config/response.status.js";
+import status from "../../config/response.status.js";
 import { PreferenceService } from "../preference/preference.service.js";
 
 // top10 데이터 가져오기

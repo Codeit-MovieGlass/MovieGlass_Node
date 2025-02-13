@@ -1,80 +1,12 @@
 import { StatusCodes } from "http-status-codes";
-
 export const status = {
-  // success
-  SUCCESS: {
-    status: StatusCodes.OK,
-    isSuccess: true,
-    code: 2000,
-    message: "success!",
-  },
-  IMAGE_SAVE_SUCCESS: {
-    status: StatusCodes.OK,
-    isSuccess: true,
-    code: 2001,
-    message: "이미지 저장 성공입니다."
-  },
-  //Problem
-  PROBLEM_STATISTIC_SUCCESS: {
-    status: StatusCodes.OK,
-    isSuccess: true,
-    code: "PROBLEM2001",
-    message: "사용자 문제 통계 조회 성공입니다."
-  },
-
-  //subscription
-  SUBSCRIPTION_SUCCESS: {
-    status: StatusCodes.OK,
-    isSuccess: true,
-    code: "SUBSCRIPTION2001",
-    message: "구독하기 성공입니다."
-  },
-  SUBSCRIPTION_CANCEL_SUCCESS: {
-    status: StatusCodes.OK,
-    isSuccess: true,
-    code: "SUBSCRIPTION2002",
-    message: "구독하기 취소 성공입니다."
-  },
-
-  // error
-  // common err
-  INTERNAL_SERVER_ERROR: {
-    status: StatusCodes.INTERNAL_SERVER_ERROR,
-    isSuccess: false,
-    code: "COMMON000",
-    message: "서버 에러, 관리자에게 문의 바랍니다.",
-  },
-  BAD_REQUEST: {
-    status: StatusCodes.BAD_REQUEST,
-    isSuccess: false,
-    code: "COMMON001",
-    message: "잘못된 요청입니다.",
-  },
-  UNAUTHORIZED: {
-    status: StatusCodes.UNAUTHORIZED,
-    isSuccess: false,
-    code: "COMMON002",
-    message: "권한이 잘못되었습니다.",
-  },
-  METHOD_NOT_ALLOWED: {
-    status: StatusCodes.METHOD_NOT_ALLOWED,
-    isSuccess: false,
-    code: "COMMON003",
-    message: "지원하지 않는 Http Method 입니다.",
-  },
-  FORBIDDEN: {
-    status: StatusCodes.FORBIDDEN,
-    isSuccess: false,
-    code: "COMMON004",
-    message: "금지된 요청입니다.",
-  },
-  NOT_FOUND: {
-    status: StatusCodes.NOT_FOUND,
-    isSuccess: false,
-    code: "COMMON005",
-    message: "데이터를 찾을 수 없습니다.",
-  },
-  setMessage(baseStatus, newMessage) {
-    return { ...baseStatus, message: newMessage };
-  },
+  SUCCESS: { isSuccess: true, code: 200, message: "요청 성공" },
+  CREATED: { isSuccess: true, code: 201, message: "리소스 생성 성공" },
+  BAD_REQUEST: { isSuccess: false, code: 400, message: "잘못된 요청입니다." },
+  UNAUTHORIZED: { isSuccess: false, code: 401, message: "인증되지 않은 사용자입니다." },
+  FORBIDDEN: { isSuccess: false, code: 403, message: "권한이 없습니다." },
+  NOT_FOUND: { isSuccess: false, code: 404, message: "요청한 리소스를 찾을 수 없습니다." },
+  INTERNAL_SERVER_ERROR: { isSuccess: false, code: 500, message: "서버 오류가 발생했습니다." },
 };
+
+export default status;

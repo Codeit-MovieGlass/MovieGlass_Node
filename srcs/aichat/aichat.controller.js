@@ -1,6 +1,6 @@
 import { createThread, sendMessageToThread } from "./aichat.service.js";
 import { response } from "../../config/response.js";
-import { status } from "../../config/response.status.js";
+import status from "../../config/response.status.js";
 
 // 🎯 새로운 채팅 세션 (thread_id) 생성
 export const createAiChatSession = async (req, res) => {
