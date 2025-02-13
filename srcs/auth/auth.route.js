@@ -7,8 +7,10 @@ import {
   handleTokenRefresh,
 } from "./auth.controller.js";
 import { signupUser, loginUser } from "../user/user.controller.js";
+import { authMiddleware } from "./auth.middleware.js";
 
 const authRouter = express.Router();
+authRouter.get("/verify", authMiddleware);
 
 authRouter.get("/kakao", (req, res) => {
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;

@@ -1,4 +1,5 @@
 import { CurationModel } from "./curation.model.js";
+import { getWeatherCondition } from "../utils/weather.util.js";
 
 export const CurationService = {
 
@@ -14,11 +15,13 @@ export const CurationService = {
   
   shuffleCurations: async (req) => {
     try {
-      const weather = req.body.weather; // TODO : 날씨 api 연동 후 수정
-      if (!weather) {
-        // 기존 큐레이션을 제외한 랜덤 큐레이션 가져오기
-        const shuffledCurations = await CurationModel.getShuffledCurations(req);
-        return shuffledCurations;
+      const { latitude, longitude } = req.body;
+      const weather = null;
+      if (latitude) {
+        if (!latitude || !longitude) {
+          throw new Error("위도와 경도가 필요합니다.");
+        }
+        weather = await getWeatherCondition(latitude, longitude);
       }
       const shuffledCurations = await CurationModel.getShuffledCurations(req);
       const weatherCurations = await CurationModel.getWeatherCurations(weather);
