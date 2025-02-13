@@ -73,17 +73,20 @@ export const userLogout = async (req, res) => {
 export const signupUser = async (req, res) => {
   try {
       const signupInfo = req.body;
-      const isSuccess = await UserService.postUser(signupInfo);
+      const { userId } = await UserService.postUser(signupInfo); // ✅ user_id 받기
 
-      // ✅ 회원가입 성공 시 응답 반환
-      return res.send(response(status.SUCCESS, singupUserDTO(isSuccess)));
+      // ✅ 회원가입 성공 시 응답 반환 (user_id 포함)
+      return res.status(201).send(response(
+          status.SUCCESS,
+          singupUserDTO("회원가입 성공", userId) // ✅ user_id 추가
+      ));
   } catch (error) {
       console.error("회원가입 에러:", error);
 
       // ✅ 에러 메시지를 그대로 응답에 포함
-      return res.send(response(
+      return res.status(400).send(response(
           status.BAD_REQUEST,
-          errorResponseDTO(error.message)  // 🔥 error.message 직접 반환
+          errorResponseDTO(error)  // 🔥 error.message 직접 반환
       ));
   }
 };

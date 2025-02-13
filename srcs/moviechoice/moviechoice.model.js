@@ -50,13 +50,13 @@ export const MovieKeywordModel = {
   };
 
   export const MovieSelectionModel = {
-    saveSelectedMovies: async (userId, kmdbIds) => {
+    saveSelectedMovies: async (userId, movie_id) => {
       try {
-        if (kmdbIds.length < 3) {
+        if (movie_id.length < 3) {
           throw new Error("최소 3개의 영화를 선택해야 합니다.");
         }
   
-        const values = kmdbIds.map((kmdbId) => [userId, kmdbId]); // ✅ 다중 삽입을 위한 데이터 변환
+        const values = movie_id.map((kmdbId) => [userId, movie_id]); // ✅ 다중 삽입을 위한 데이터 변환
         const [result] = await pool.query(sql.insertSelectedMovies, [values]);
   
         return result;

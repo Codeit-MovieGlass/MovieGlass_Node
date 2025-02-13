@@ -21,8 +21,9 @@ export const patchUserStatusrResponseDTO = (message) => ({
   message,
 });
 
-export const singupUserDTO = (message) => ({
+export const singupUserDTO = (message, userId) => ({
   message,
+  userId,
 });
 
 export const loginUserDTO = (token) => ({

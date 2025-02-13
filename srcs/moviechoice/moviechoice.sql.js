@@ -31,7 +31,7 @@ export const sql = {
     WHERE production_keyword LIKE ?;
   `,
   insertSelectedMovies: `
-    INSERT INTO SelectedMovies (user_id, kmdb_id)
+    INSERT INTO SelectedMovies (user_id, movie_id)
     VALUES ?;
   `
 };
