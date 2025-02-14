@@ -8,7 +8,7 @@ import { response } from "../../config/response.js";
 export const uploadReview = async (req, res) => {
   try {
     const { movie_id } = req.params;
-    const { rating, review_comment, view_count } = req.body;
+    const { rating, review_comment, view_count, spoiler } = req.body;
     const user_id = req.userId;
     // 리뷰 저장 요청
     const review = await ReviewService.createReview({
@@ -16,7 +16,8 @@ export const uploadReview = async (req, res) => {
       movie_id,
       rating,
       review_comment,
-      view_count
+      view_count,
+      spoiler
     });
     
     await PreferenceService.updateUserPreferences({

@@ -1,7 +1,7 @@
 export const sql = {
     insertReview: `
-      INSERT INTO Review (user_id, movie_id, rating, review_comment, view_count, nick_name)
-      VALUES (?, ?, ?, ?, ?, ?);
+      INSERT INTO Review (user_id, movie_id, rating, review_comment, view_count, nick_name, spoiler)
+      VALUES (?, ?, ?, ?, ?, ?, ?);
     `,
     selectNicknameByUserId: "SELECT nickname as nick_name FROM user WHERE user_id = ?",
 
