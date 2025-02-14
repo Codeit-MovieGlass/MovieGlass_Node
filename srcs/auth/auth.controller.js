@@ -41,7 +41,7 @@ const handleKakaoAuth = async (req, res) => {
         const { accessToken, refreshToken, userInfo, isNewUser } = await kakaoLogin(code);
 
         return res.status(isNewUser ? 201 : 200).json(response(
-            { isSuccess: status.SUCCESS.isSuccess, status: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
+            { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
             authResponseDTO(accessToken, refreshToken)
         ));
     } catch (error) {
