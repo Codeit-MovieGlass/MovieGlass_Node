@@ -73,6 +73,11 @@ export const ReviewModel = {
   selectReviews: async ({ movie_id }) => {
     try {
       const reviews = await pool.query(sql.selectReviews, [movie_id]);
+      if (reviews[0].length === 0) {
+        throw new BaseError({
+          message: "해당 영화의 리뷰가 없습니다."
+        });
+      }
       console.log("reviews", reviews);
       reviews[0].sort(() => Math.random() - 0.5);
       return reviews[0];
