@@ -112,7 +112,7 @@ export const updateLike = async (req, res) => {
       ratingDIf: result ? 3 : -3,
     });
     res.send(response(status.SUCCESS, {
-      success: result
+      liked: result
     }));
   } catch (error) {
     console.error("좋아요 업데이트 오류:", error);
