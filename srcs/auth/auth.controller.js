@@ -93,7 +93,7 @@ const handleNaverAuth = async (req, res) => {
 const handleGoogleAuth = async (req, res) => {
     try {
         // 1️⃣ 프론트에서 받은 인가코드 확인
-        const { code } = req.query;
+        const code  = req.body.code || req.query.code;  
         if (!code) {
             return res.status(400).json(response(
                 { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
