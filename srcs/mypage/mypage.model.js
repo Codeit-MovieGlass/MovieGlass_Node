@@ -53,8 +53,13 @@ export const fetchCalendarData = async (userId, year, month) => {
 
 // 4. 사용자가 남긴 리뷰 조회
 export const fetchUserReviews = async (userId) => {
+
   const [reviews] = await pool.query(queries.getUserReviews, [userId]);
-  return reviews;
+  const formattedReviews = reviews.map(review => ({
+    ...review,
+    spoiler: Boolean(review.spoiler) // ✅ 0 → false, 1 → true 변환
+  }));
+  return formattedReviews;
 };
 
 // 5. 사용자가 좋아요한 영화 조회
