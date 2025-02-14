@@ -102,6 +102,6 @@ export const searchMovieReviews = async (req, res) => {
     res.send(response(status.SUCCESS, reviews));
   } catch (error) {
     console.error("리뷰 조회 오류:", error);
-    res.send(responseData(status.BAD_REQUEST, "리뷰 조회 중 오류가 발생했습니다."));
+    res.send(responseData("리뷰 조회 중 오류가 발생했습니다."));
   }
 }
