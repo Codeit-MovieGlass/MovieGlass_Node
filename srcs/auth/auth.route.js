@@ -36,7 +36,7 @@ authRouter.get("/google/callback", handleGoogleAuth);
 
 authRouter.post("/refresh", handleTokenRefresh);
 
-authRouter.post("/signUp", signupUser);
+authRouter.post("/signup", signupUser);
 authRouter.post("/login", loginUser);
 
 authRouter.use(authenticateToken);
