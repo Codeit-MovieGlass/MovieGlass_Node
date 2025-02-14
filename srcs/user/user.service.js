@@ -36,8 +36,9 @@ export const UserService = {
   postUser: async (signupInfo) => {
     try {
       const { email, password, nickname } = signupInfo;
-      console.log(signupInfo);
-      console.log("postUser");
+      
+      // 암호화
+      // signupInfo.password = await UserModel.encryptPassword(password);
       // 🔥 필수 입력값 체크
       if (!email || !password || !nickname) {
         console.log("필수 정보를 입력해주세요.");

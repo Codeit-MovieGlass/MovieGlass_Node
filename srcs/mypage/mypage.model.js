@@ -1,15 +1,30 @@
 import { pool } from "../../config/db.js";
 import queries from "./mypage.sql.js";
 
-// 1. 사용자 프로필 조회
 export const fetchProfile = async (userId) => {
   const [result] = await pool.query(queries.getUserProfile, [userId]);
-  return result[0]; // 결과는 배열이므로 첫 번째 값을 반환
+  const user = result[0];
+
+  // ✅ 서버에서 이미지 접근 가능하도록 URL 변환
+  return {
+    userId: user.user_id,
+    email: user.email,
+    nickname: user.nickname,
+    profileImage: user.profile_image_url
+      ? `${process.env.SERVER_URL}${user.profile_image_url}` // 서버 URL + 파일 경로
+      : null,
+  };
 };
 
-// 2. 사용자 프로필 업데이트
+
 export const updateProfileInDB = async (userId, nickname, profileImage) => {
-  await pool.query(queries.updateUserProfile, [nickname, profileImage, userId]);
+  const query = profileImage 
+    ? "UPDATE user SET nickname = ?, profile_image_url = ? WHERE user_id = ?"
+    : "UPDATE user SET nickname = ? WHERE user_id = ?";
+    
+  const params = profileImage ? [nickname, profileImage, userId] : [nickname, userId];
+
+  await pool.query(query, params);
 };
 
 // 3. 캘린더 데이터 조회

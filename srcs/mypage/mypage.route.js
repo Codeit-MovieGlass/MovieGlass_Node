@@ -7,12 +7,13 @@ import {
   getLikedMovies,
 } from "./mypage.controller.js";
 import authenticateToken from "../../config/jwt.middleware.js";
+import { upload } from "../utils/multer.js";
 
 const router = express.Router();
 router.use(authenticateToken);
 
 router.get("/profile", getProfile);
-router.put("/profile", updateProfile);
+router.put("/profile", upload.single("profileImage"), updateProfile);
 router.get("/calendar", getCalendarData);
 router.get("/reviews", getUserReviews);
 router.get("/liked-movies", getLikedMovies);

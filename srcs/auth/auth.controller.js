@@ -37,8 +37,6 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 const handleKakaoAuth = async (req, res) => {
     try {
         const code  = req.body.code || req.query.code;  
-
-        // 
         if (!code) {
             return res.json(response(
                 { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },

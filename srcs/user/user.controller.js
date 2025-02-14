@@ -74,7 +74,7 @@ export const signupUser = async (req, res) => {
   try {
       const signupInfo = req.body;
       const { userId } = await UserService.postUser(signupInfo); // ✅ user_id 받기
-
+      
       // ✅ 회원가입 성공 시 응답 반환 (user_id 포함)
       return res.status(201).send(response(
           status.SUCCESS,

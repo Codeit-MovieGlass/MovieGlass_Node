@@ -9,7 +9,12 @@ import moviechoiceRouter from "./srcs/moviechoice/moviechoice.route.js";
 import aichatRouter from "./srcs/aichat/aichat.route.js";
 import { mypageRouter } from "./srcs/mypage/mypage.route.js";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
@@ -20,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cors({origin: 'http://localhost:3000',credentials: true}));
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/movies", movieRouter);

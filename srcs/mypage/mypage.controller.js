@@ -7,7 +7,7 @@ import {
 } from "./mypage.model.js";
 import { responseData, errorResponse } from "../../config/response.js";
 
-
+import { upload } from "../utils/multer.js";
 // 1. 사용자 프로필 조회
 export const getProfile = async (req, res) => {
   try {
@@ -32,7 +32,11 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    const { nickname, profileImage } = req.body;
+    const { nickname } = req.body;
+    console.log(nickname);
+    const profileImage = req.file ? `/uploads/profile/${req.file.filename}` : null; // ✅ 업로드된 이미지 경로 저장
+    console.log(profileImage);
+
 
     await updateProfileInDB(userId, nickname, profileImage);
 
