@@ -29,9 +29,5 @@ export const sql = {
       production_keyword AS productionKeyword
     FROM Movie
     WHERE ${Array(keywordCount).fill("production_keyword LIKE ?").join(" OR ")};
-  `,
-  insertSelectedMovies: `
-    INSERT INTO SelectedMovies (user_id, movie_id)
-    VALUES ?;
   `
 };
