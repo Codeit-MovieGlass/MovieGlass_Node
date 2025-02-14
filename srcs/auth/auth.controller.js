@@ -36,14 +36,12 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 
 const handleKakaoAuth = async (req, res) => {
     try {
-        console.log(req.body.code);
         const code  = req.body.code || req.query.code;  
-        console.log("Received code:", code);
 
         const { accessToken, refreshToken, userInfo, isNewUser } = await kakaoLogin(code);
 
         return res.status(isNewUser ? 201 : 200).json(response(
-            { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
+            { isSuccess: status.SUCCESS.isSuccess, status: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
             authResponseDTO(accessToken, refreshToken)
         ));
     } catch (error) {
