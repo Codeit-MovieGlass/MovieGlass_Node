@@ -36,7 +36,8 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 
 const handleKakaoAuth = async (req, res) => {
     try {
-        const { code } = req.body.code || req.query.code;  
+        console.log(req.body.code);
+        const code  = req.body.code || req.query.code;  
         console.log("Received code:", code);
 
         const { accessToken, refreshToken, userInfo, isNewUser } = await kakaoLogin(code);
