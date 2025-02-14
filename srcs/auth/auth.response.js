@@ -1,7 +1,6 @@
 // srcs/auth/auth.response.js
 export const authResponseDTO = (accessToken, refreshToken,) => ({
-  accessToken,
-  refreshToken
+  accessToken
 });
 
 export const tokenRefreshResponseDTO = (newRefreshToken) => ({

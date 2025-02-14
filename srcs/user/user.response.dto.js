@@ -28,7 +28,6 @@ export const singupUserDTO = (message, userId) => ({
 
 export const loginUserDTO = (token) => ({
   accesstoken: token.accessToken,
-  refreshtoken: token.refreshToken,
 });
 
 export const userLogoutDTO = (message) => ({

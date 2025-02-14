@@ -134,6 +134,7 @@ export const MovieModel = {
 
   updateLike: async (movie_id, user_id) => {
     try {
+      // 영화 정보가 없으면 에러
       const [rows] = await pool.query(sql.updateLike, [user_id, movie_id]);
       const [likes] = await pool.query(sql.checkLike, [user_id, movie_id]);
 

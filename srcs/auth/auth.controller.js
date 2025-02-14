@@ -47,7 +47,7 @@ const handleKakaoAuth = async (req, res) => {
 
         return res.status(isNewUser ? 201 : 200).json(response(
             { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
-            authResponseDTO(accessToken, refreshToken)
+            authResponseDTO(accessToken)
         ));
     } catch (error) {
         console.error("카카오 로그인 에러:", error);
@@ -61,7 +61,7 @@ const handleKakaoAuth = async (req, res) => {
 const handleNaverAuth = async (req, res) => {
     try {
         // 1. 프론트에서 받은 인가코드
-        const { code } = req.query;
+        const code  = req.body.code || req.query.code;  
         if (!code) {
             return res.json(response(
                 { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
@@ -75,12 +75,11 @@ const handleNaverAuth = async (req, res) => {
         const { accessToken, refreshToken, userInfo } = await naverLogin(code);
 
         // 3. 토큰을 헤더에 추가
-        res.setHeader("Authorization", `Bearer ${accessToken}`);
 
         // 4. 응답 반환
-        return res.json(response(
-            { isSuccess: status.SUCCESS.isSuccess, code: 200, message: "네이버 로그인 성공" },
-            authResponseDTO(accessToken, refreshToken, userInfo)
+        return res.status(isNewUser ? 201 : 200).json(response(
+            { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
+            authResponseDTO(accessToken)
         ));
     } catch (error) {
         console.error("네이버 로그인 에러:", error);
@@ -113,7 +112,7 @@ const handleGoogleAuth = async (req, res) => {
         // 4️⃣ 응답 반환 (회원가입 여부에 따라 상태 코드 변경)
         return res.status(isNewUser ? 201 : 200).json(response(
             { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
-            authResponseDTO(accessToken, refreshToken, userInfo)
+            authResponseDTO(accessToken)
         ));
     } catch (error) {
         console.error("구글 로그인 에러:", error);

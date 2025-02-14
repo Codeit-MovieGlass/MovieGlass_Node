@@ -64,6 +64,8 @@ export const fetchUserReviews = async (userId) => {
 
 // 5. 사용자가 좋아요한 영화 조회
 export const fetchLikedMovies = async (userId) => {
+  console.log(userId);
   const [likedMovies] = await pool.query(queries.getLikedMovies, [userId]);
+  console.log(likedMovies);
   return likedMovies;
 };
