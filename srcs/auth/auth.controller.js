@@ -72,7 +72,7 @@ const handleNaverAuth = async (req, res) => {
         console.log("네이버 로그인 - 받은 인가코드:", code);
 
         // 2. 네이버 로그인 처리
-        const { accessToken, refreshToken, userInfo } = await naverLogin(code);
+        const { accessToken, refreshToken, userInfo, isNewUser } = await naverLogin(code);
 
         // 3. 토큰을 헤더에 추가
 
@@ -94,20 +94,9 @@ const handleGoogleAuth = async (req, res) => {
     try {
         // 1️⃣ 프론트에서 받은 인가코드 확인
         const code  = req.body.code || req.query.code;  
-        if (!code) {
-            return res.status(400).json(response(
-                { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
-                authErrorResponseDTO("인가 코드가 필요합니다.")
-            ));
-        }
-
-        console.log("구글 로그인 - 받은 인가코드:", code);
 
         // 2️⃣ 구글 로그인 처리
         const { accessToken, refreshToken, userInfo, isNewUser } = await googleLogin(code);
-
-        // 3️⃣ 토큰을 헤더에 추가
-        res.setHeader("Authorization", `Bearer ${accessToken}`);
 
         // 4️⃣ 응답 반환 (회원가입 여부에 따라 상태 코드 변경)
         return res.status(isNewUser ? 201 : 200).json(response(
