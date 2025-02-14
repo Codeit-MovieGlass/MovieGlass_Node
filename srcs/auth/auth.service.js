@@ -172,7 +172,7 @@ const googleLogin = async (code) => {
                 grant_type: "authorization_code",
                 code,
             },
-            { headers: { "Content-Type": "application/json" } }
+            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         );
 
         const { access_token, id_token } = tokenResponse.data;
