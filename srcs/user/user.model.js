@@ -22,6 +22,14 @@ export const UserModel = {
       throw new Error("유저 조회 실패");
     }
   },
+  findUsernameById: async (userId) => {
+    try {
+      const [results] = await pool.query(sql.findUsernameById, [userId]);
+      return results[0];
+    } catch (error) {
+      throw new Error("유저 조회 실패");
+    }
+  },
 
   updateNickname: async (userId, nicknameData) => {
     try {

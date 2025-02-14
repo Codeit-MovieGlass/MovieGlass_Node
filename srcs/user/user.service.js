@@ -113,6 +113,17 @@ export const UserService = {
         console.error("로그아웃 서비스 오류:", error);
         throw new Error("로그아웃 실패");
     }
+  },
+
+
+  getUserNickname: async (userId) => {
+    try {
+      const user = await UserModel.findUsernameById(userId);
+      return user.nickname;
+    } catch (error) {
+      console.error("사용자 닉네임 조회 오류:", error);
+      throw new Error("사용자 닉네임 조회 실패");
+    }
   }
 
 

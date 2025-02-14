@@ -28,7 +28,6 @@ const queries = {
     FROM Review
     JOIN Movie ON Review.movie_id = Movie.movie_id 
     WHERE Review.user_id = ?
-
   `,
 
   // 5. 사용자가 좋아요한 영화 조회

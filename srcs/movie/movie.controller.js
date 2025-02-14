@@ -2,12 +2,17 @@ import { MovieService } from "./movie.service.js";
 import { response } from "../../config/response.js";
 import status from "../../config/response.status.js";
 import { PreferenceService } from "../preference/preference.service.js";
+import { UserService } from "../user/user.service.js";
 
 // top10 데이터 가져오기
 export const top10Data = async (req, res) => {
   try {
+    const user_id = req.userId;
+    // 사용자 닉네임
+    const nickname = await UserService.getUserNickname(user_id);
     const top10Data = await MovieService.getTop10Data(req);
     res.send(response(status.SUCCESS, {
+      nickname,
       top10Data
     }));
   } catch (error) {

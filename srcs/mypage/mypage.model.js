@@ -57,7 +57,7 @@ export const fetchUserReviews = async (userId) => {
   const [reviews] = await pool.query(queries.getUserReviews, [userId]);
   const formattedReviews = reviews.map(review => ({
     ...review,
-    spoiler: Boolean(review.spoiler) // ✅ 0 → false, 1 → true 변환
+    spoiler: Boolean(review.spoiler)
   }));
   return formattedReviews;
 };
