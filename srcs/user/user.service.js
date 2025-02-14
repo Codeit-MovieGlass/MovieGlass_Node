@@ -103,4 +103,16 @@ export const UserService = {
       throw new BaseError(status.BAD_REQUEST, "프로필 변경 실패");
     }
   },
+
+  logoutUser: async (userId) => {
+    try {
+        await UserModel.userLogout(userId);
+        console.log(`사용자 ${userId} 로그아웃 완료`);
+    } catch (error) {
+        console.error("로그아웃 서비스 오류:", error);
+        throw new Error("로그아웃 실패");
+    }
+  }
+
+
 };

@@ -17,6 +17,7 @@ export const createAiChatSession = async (req, res) => {
 export const handleAiChat = async (req, res) => {
   try {
     const { thread_id, message } = req.body;
+    const userId = req.userId;
     if (!thread_id || !message) {
       return res.status(400).json(response(status.BAD_REQUEST, "thread_id와 메시지를 입력하세요"));
     }

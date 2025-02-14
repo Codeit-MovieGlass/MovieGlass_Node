@@ -6,8 +6,9 @@ import {
   handleGoogleAuth,
   handleTokenRefresh,
 } from "./auth.controller.js";
-import { signupUser, loginUser } from "../user/user.controller.js";
+import { signupUser, loginUser, logout } from "../user/user.controller.js";
 import { authMiddleware } from "./auth.middleware.js";
+import authenticateToken from "../../config/jwt.middleware.js";
 
 const authRouter = express.Router();
 authRouter.get("/verify", authMiddleware);
@@ -37,5 +38,9 @@ authRouter.post("/refresh", handleTokenRefresh);
 
 authRouter.post("/signUp", signupUser);
 authRouter.post("/login", loginUser);
+
+authRouter.use(authenticateToken);
+
+authRouter.post("/logout", authenticateToken, logout);
 
 export default authRouter;

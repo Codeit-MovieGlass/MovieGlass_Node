@@ -10,4 +10,5 @@ export const sql = {
   postRefreshToken: `UPDATE user SET refresh_token = ? WHERE user_id = ?`,
   logoutUserSQL: `UPDATE user SET refresh_token = ? WHERE user_id = ?`,
   updateProfileSQL: `UPDATE user SET profile_image_url = ? WHERE user_id = ?`,
+  userLogoutSQL: `UPDATE user SET refresh_token = NULL WHERE user_id = ?`,
 };

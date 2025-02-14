@@ -102,3 +102,30 @@ export const loginUser = async (req, res) => {
     res.send(response(status.BAD_REQUEST, "로그인 실패"));
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+      const userId = req.userId;
+      console.log(userId);
+
+      if (!userId) {
+          return res.status(401).json(response(
+              { isSuccess: false, code: 401, message: "로그인이 필요합니다." },
+              {}
+          ));
+      }
+
+      await UserService.logoutUser(userId);
+
+      return res.status(200).json(response(
+          { isSuccess: true, code: 200, message: "로그아웃 성공" },
+          {}
+      ));
+  } catch (error) {
+      console.error("로그아웃 에러:", error);
+      return res.status(500).json(response(
+          { isSuccess: false, code: 500, message: "로그아웃 중 오류 발생" },
+          {}
+      ));
+  }
+};

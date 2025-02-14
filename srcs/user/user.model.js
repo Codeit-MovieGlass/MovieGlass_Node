@@ -142,4 +142,14 @@ export const UserModel = {
       throw new Error("프로필변경 실패");
     }
   },
+
+  userLogout: async (userId) => {
+    try {
+      await pool.query(sql.userLogoutSQL, [userId]);
+      console.log(`사용자 ${userId} 로그아웃 완료`);
+    } catch (error) {
+      console.error("로그아웃 서비스 오류:", error);
+      throw new Error("로그아웃 실패");
+    }
+  }
 };

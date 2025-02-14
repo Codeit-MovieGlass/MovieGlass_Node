@@ -38,6 +38,13 @@ const handleKakaoAuth = async (req, res) => {
     try {
         const code  = req.body.code || req.query.code;  
 
+        // 
+        if (!code) {
+            return res.json(response(
+                { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
+                authErrorResponseDTO("인가 코드가 필요합니다.")
+            ));
+        }
         const { accessToken, refreshToken, userInfo, isNewUser } = await kakaoLogin(code);
 
         return res.status(isNewUser ? 201 : 200).json(response(
