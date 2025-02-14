@@ -117,7 +117,6 @@ export const updateLike = async (req, res) => {
   } catch (error) {
     console.error("좋아요 업데이트 오류:", error);
     res.send(response(status.BAD_REQUEST, {
-      status: "fail",
       message: "좋아요 업데이트 중 오류가 발생했습니다."
     }));
   }
