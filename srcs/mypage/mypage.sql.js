@@ -23,7 +23,7 @@ const queries = {
 
   // 4. 사용자가 남긴 리뷰 조회
   getUserReviews: `
-    SELECT movie_name, rating, review_comment, production_image 
+    SELECT review_id, movie_name, rating, review_comment, production_image 
     FROM Review 
     JOIN Movie ON Review.movie_id = Movie.movie_id 
     WHERE Review.user_id = ?
