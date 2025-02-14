@@ -37,9 +37,11 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 const handleKakaoAuth = async (req, res) => {
     try {
         res.setHeader("Content-Type", "application/json");
+        console.log("카카오 로그인 - access done");
         
         // **수정됨**: POST 요청 본문에서 인가 코드 받기
         const { code } = req.body.code || req.query.code;  
+        console.log("login - 받은 인가코드:", code);
         if (!code) {
             return res.status(400).json(response(
                 { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },

@@ -46,6 +46,7 @@ const authenticateWithProvider = async (token, url, provider) => {
 
 const kakaoLogin = async (code) => {
     try {
+        console.log("카카오 login - 요청 받음");
         // **수정됨**: 카카오 OAuth 서버에서 액세스 토큰 요청
         const tokenResponse = await axios.post(
             "https://kauth.kakao.com/oauth/token",
@@ -57,6 +58,7 @@ const kakaoLogin = async (code) => {
             }),
             { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         );
+        console.log("카카오 login - call done");
 
         const { access_token } = tokenResponse.data;
         console.log("카카오 access_token:", access_token);
@@ -67,7 +69,7 @@ const kakaoLogin = async (code) => {
         });
 
         const kakaoUser = userResponse.data;
-        console.log("카카오 유저 정보:", kakaoUser);
+        console.log("카카오 user 정보:", kakaoUser);
 
         const providerId = kakaoUser.id;
         const nickname = kakaoUser.kakao_account.profile.nickname || kakaoUser.properties.nickname;
