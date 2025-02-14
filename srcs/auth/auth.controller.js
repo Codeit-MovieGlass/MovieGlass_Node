@@ -36,7 +36,8 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 
 const handleKakaoAuth = async (req, res) => {
     try {
-        const { code } = req.query;
+        // **수정됨**: POST 요청 본문에서 인가 코드 받기
+        const { code } = req.body;  
         if (!code) {
             return res.status(400).json(response(
                 { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "인가 코드가 없습니다." },
@@ -46,11 +47,13 @@ const handleKakaoAuth = async (req, res) => {
 
         console.log("카카오 로그인 - 받은 인가코드:", code);
 
+        // **카카오 로그인 처리**
         const { accessToken, refreshToken, userInfo, isNewUser } = await kakaoLogin(code);
 
+        // **Bearer 템플릿 리터럴 수정**
         res.setHeader("Authorization", `Bearer ${accessToken}`);
 
-        return res.status(isNewUser ? 201 : 200).json(response( // ✅ 상태 코드 적용
+        return res.status(isNewUser ? 201 : 200).json(response(
             { isSuccess: status.SUCCESS.isSuccess, code: isNewUser ? 201 : 200, message: isNewUser ? "회원가입 성공" : "로그인 성공" },
             authResponseDTO(accessToken, refreshToken, userInfo)
         ));

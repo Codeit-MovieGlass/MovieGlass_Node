@@ -10,11 +10,12 @@ import { signupUser, loginUser } from "../user/user.controller.js";
 
 const authRouter = express.Router();
 
-authRouter.get("/kakao", (req, res) => {
-  const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
-  res.redirect(kakaoAuthURL);
-});
-authRouter.get("/kakao/callback", handleKakaoAuth);
+// authRouter.get("/kakao", (req, res) => {
+//   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
+//   res.redirect(kakaoAuthURL);
+// });
+// authRouter.get("/kakao/callback", handleKakaoAuth);
+authRouter.post("/kakao", handleKakaoAuth);
 
 authRouter.get("/naver", (req, res) => {
   const naverAuthURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.NAVER_REDIRECT_URI}&response_type=code&state=random_state_string`;
