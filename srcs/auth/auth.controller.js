@@ -36,6 +36,19 @@ const handleAuth = async (providerLogin, providerName, req, res) => {
 
 const handleKakaoAuth = async (req, res) => {
     try {
+        console.log("카카오 로그인 - 요청 받음");
+        // 헤더가 있는 지 확인
+        console.log("auth" + req.headers.authorization);
+        console.log("code"+req.body.code);
+        console.log("query" + req.query.code);
+        console.log("body" + req.body);
+        console.log("headers" + req.headers);
+        if (!req.headers.authorization) {
+            return res.status(400).json(response(
+                { isSuccess: status.BAD_REQUEST.isSuccess, code: 400, message: "헤더에 인가 코드가 없습니다." },
+                authErrorResponseDTO("인가 코드가 필요합니다.")
+            ));
+        }
         res.setHeader("Content-Type", "application/json");
         console.log("카카오 로그인 - access done");
         
