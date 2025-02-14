@@ -66,18 +66,18 @@ export const MovieKeywordModel = {
 
   export const MovieSelectionModel = {
     saveSelectedMovies: async (userId, movie_id) => {
-      try {
-        if (movie_id.length < 3) {
-          throw new Error("최소 3개의 영화를 선택해야 합니다.");
+        try {
+            if (movie_id.length < 3) {
+                throw new Error("최소 3개의 영화를 선택해야 합니다.");
+            }
+
+            const values = movie_id.map((id) => [userId, id]); // ✅ movie_id를 직접 저장
+            const [result] = await pool.query(sql.insertSelectedMovies, [values]);
+
+            return result;
+        } catch (error) {
+            console.error("선택한 영화 저장 실패:", error);
+            throw error;
         }
-  
-        const values = movie_id.map((movie_id) => [userId, movie_id]); // ✅ 다중 삽입을 위한 데이터 변환
-        const [result] = await pool.query(sql.insertSelectedMovies, [values]);
-  
-        return result;
-      } catch (error) {
-        console.error("선택한 영화 저장 실패:", error);
-        throw error;
-      }
     }
-  };
+};

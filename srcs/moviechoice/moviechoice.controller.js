@@ -22,23 +22,21 @@ export const MovieChoiceController = {
   },
   saveSelectedMoviesAndUpdatePreferences: async (req, res) => {
     try {
-      const { user_id, movie_id } = req.body;
-      const ratingDIf = 5;
+        const { user_id, movie_id } = req.body;
+        const ratingDIf = 5; // ✅ 항상 5로 고정
 
-      if (!user_id || !Array.isArray(movie_id) || movie_id.length < 3) {
-        return res.status(400).json({ success: false, message: "최소 3개의 영화 ID가 필요합니다." });
+        if (!user_id || !Array.isArray(movie_id) || movie_id.length < 3) {
+            return res.status(400).json({ success: false, message: "최소 3개의 영화 ID가 필요합니다." });
+        }
+
+        // ✅ 사용자 선호도 업데이트 (movie_id 직접 사용)
+        for (const id of movie_id) {
+          await PreferenceService.updateUserPreferences({ user_id, movie_id: id, ratingDIf });
       }
-
-      // ✅ 선택한 영화 저장 (기존 로직 유지)
-      await MovieChoiceService.saveSelectedMovies(user_id, movie_id);
-
-      // ✅ 사용자 선호도 업데이트 (preference 연동)
-      await PreferenceService.updateUserPreferences({ user_id, movie_id, ratingDIf });
-
-      res.status(200).json({ success: true, message: "영화 선택 및 사용자 선호도 업데이트 성공" });
+        res.status(200).json({ success: true, message: "영화 선택 및 사용자 선호도 업데이트 성공" });
     } catch (error) {
-      console.error("❌ 영화 선택 및 사용자 선호도 업데이트 오류:", error);
-      res.status(500).json({ success: false, message: error.message });
+        console.error("❌ 영화 선택 및 사용자 선호도 업데이트 오류:", error);
+        res.status(500).json({ success: false, message: error.message });
     }
-  }
+}
 };

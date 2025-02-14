@@ -46,6 +46,7 @@ const authenticateWithProvider = async (token, url, provider) => {
 
 const kakaoLogin = async (code) => {
     try {
+        // **수정됨**: 카카오 OAuth 서버에서 액세스 토큰 요청
         const tokenResponse = await axios.post(
             "https://kauth.kakao.com/oauth/token",
             qs.stringify({
@@ -60,6 +61,7 @@ const kakaoLogin = async (code) => {
         const { access_token } = tokenResponse.data;
         console.log("카카오 access_token:", access_token);
 
+        // **수정됨**: 액세스 토큰을 사용하여 유저 정보 가져오기
         const userResponse = await axios.get("https://kapi.kakao.com/v2/user/me", {
             headers: { Authorization: `Bearer ${access_token}` },
         });
@@ -83,7 +85,7 @@ const kakaoLogin = async (code) => {
         if (user) {
             userId = user.user_id;
         } else {
-            userId = await signUpSocialUser(email, providerId, "kakao", profileImage);
+            userId = await signUpSocialUser(email, providerId, "kakao", nickname, profileImage);
             isNewUser = true;
         }
 
