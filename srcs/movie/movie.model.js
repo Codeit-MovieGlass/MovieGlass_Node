@@ -134,10 +134,8 @@ export const MovieModel = {
 
   updateLike: async (movie_id, user_id) => {
     try {
-      console.log("좋아요 업데이트:", movie_id, user_id);
-      const [rows] = await pool.query(sql.updateLike, [movie_id, user_id]);
-      console.log("좋아요 업데이트 결과:", rows);
-      const [likes] = await pool.query(sql.checkLike, [movie_id, user_id]);
+      const [rows] = await pool.query(sql.updateLike, [user_id, movie_id]);
+      const [likes] = await pool.query(sql.checkLike, [user_id, movie_id]);
 
       return likes[0].liked === 1;
     } catch (error) {
