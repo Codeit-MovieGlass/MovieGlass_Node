@@ -9,7 +9,7 @@ const { JWT_SECRET } = process.env;
 const authMiddleware = async (req, res, next) => {
     try {
         // 1️⃣ 요청에서 액세스 토큰 추출
-        const accessToken = extractTokenFromHeader(req);
+        const accessToken = req.body.accessToken;
         console.log("🛠️ 추출된 액세스 토큰:", accessToken);
 
         // 2️⃣ 액세스 토큰 검증 (단, 만료된 경우에도 정보를 추출할 수 있도록 예외 처리)
@@ -17,7 +17,10 @@ const authMiddleware = async (req, res, next) => {
         try {
             decoded = jwt.verify(accessToken, JWT_SECRET);
             console.log("✅ 유효한 액세스 토큰:", decoded);
-            return next(); // 정상 토큰이면 다음 미들웨어 실행
+            return res.send(response(status.SUCCESS, {
+                message: "유효한 액세스 토큰입니다.",
+                user: decoded
+            }));
         } catch (error) {
             if (error.name === "TokenExpiredError") {
                 console.log("⏳ 액세스 토큰 만료됨. 새 토큰을 발급합니다.");

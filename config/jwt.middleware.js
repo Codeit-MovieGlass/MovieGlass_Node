@@ -32,7 +32,17 @@ const authenticateToken = (req, res, next) => {
     }
 
     req.userId = decoded.id;
-    next();
+    console.log("🔑 인증된 사용자 ID:", req.userId);
+    return res.status(200).json(
+      response(
+      {
+        isSuccess: true,
+        code: 200,
+        message: "인증에 성공했습니다",
+      },
+      { userId: req.userId }
+      )
+    );
   });
 };
 
