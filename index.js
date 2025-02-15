@@ -23,7 +23,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-const allowedOrigins = ['http://localhost:3000', 'http://sociallogintest.s3-website.ap-northeast-2.amazonaws.com/'];
+const allowedOrigins = ['http://localhost:3000', 'http://sociallogintest.s3-website.ap-northeast-2.amazonaws.com'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
