@@ -50,7 +50,6 @@ export const getUserMovieInfo = async (req, res) => {
     const { movieId } = req.query;
     const user_id = req.userId;
     const userMovieInfo = await MovieService.getUserMovieInfo(user_id, movieId);
-    console.log("사용자 영화 정보:", userMovieInfo);
 
     res.send(response(status.SUCCESS, {
       userMovieInfo

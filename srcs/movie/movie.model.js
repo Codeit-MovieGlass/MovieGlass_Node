@@ -29,13 +29,15 @@ export const MovieModel = {
         if (pref.type === "KEYWORD") keywordWeights[pref.name] = pref.weight;
       });
 
-      console.log(`사용자 ${user_id}의 장르 가중치:`, genreWeights);
-      console.log(`사용자 ${user_id}의 키워드 가중치:`, keywordWeights);
       const [movies] = await pool.query(sql.getWeightedRecommendedMovies, [user_id, user_id]);
-
       const averageRating = await Promise.all(movies.map(async (movie) => {
         const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
-        return parseFloat(result[0].averageRating) || 0.0;
+        const rating = parseFloat(result[0].averageRating) || 0.0;
+        if (rating === 0.0) {
+          const randomRatings = [3, 3.5, 4];
+          return randomRatings[Math.floor(Math.random() * randomRatings.length)];
+        }
+        return rating;
       }));
 
       await addAverageRatingToMovies(movies);
@@ -115,6 +117,19 @@ export const MovieModel = {
   getMovieInfo: async (movie_id) => {
     try {
       const [rows] = await pool.query(sql.getMovieInfo, [movie_id]);
+      const averageRating = await Promise.all(rows.map(async (movie) => {
+        const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
+        const rating = parseFloat(result[0].averageRating) || 0.0;
+        if (rating === 0.0) {
+          const randomRatings = [3, 3.5, 4];
+          return randomRatings[Math.floor(Math.random() * randomRatings.length)];
+        }
+        return rating;
+      }));
+      rows.forEach((row, index) => {
+        row.averageRating = averageRating[index];
+      });
+
       return rows.length > 0 ? rows[0] : null;
     } catch (error) {
       console.error("영화 정보 조회 오류:", error);
@@ -124,7 +139,9 @@ export const MovieModel = {
 
   getUserMovieInfo: async (user_id, movieId) => {
     try {
+      console.log("사용자 ID:", user_id, "영화 ID:", movieId);
       const [rows] = await pool.query(sql.getUserMovieInfo, [user_id, movieId]);
+      console.log("사용자 영화 정보:", rows);
       return rows.length > 0 ? rows[0] : null;
     } catch (error) {
       console.error("사용자 영화 정보 조회 오류:", error);
@@ -135,8 +152,10 @@ export const MovieModel = {
   updateLike: async (movie_id, user_id) => {
     try {
       // 영화 정보가 없으면 에러
+      console.log("좋아요 업데이트:", movie_id, user_id);
       const [rows] = await pool.query(sql.updateLike, [user_id, movie_id]);
       const [likes] = await pool.query(sql.checkLike, [user_id, movie_id]);
+      console.log("좋아요 정보:", likes);
 
       return likes[0].liked === 1;
     } catch (error) {
