@@ -33,14 +33,15 @@ export const MovieModel = {
       const averageRating = await Promise.all(movies.map(async (movie) => {
         const [result] = await pool.query(sql.getAverageRatingByMovieId, [movie.movieId]);
         const rating = parseFloat(result[0].averageRating) || 0.0;
-        if (rating === 0.0) {
+        if (rating === 0) {
           const randomRatings = [3, 3.5, 4];
           return randomRatings[Math.floor(Math.random() * randomRatings.length)];
         }
         return rating;
       }));
-
-      await addAverageRatingToMovies(movies);
+      movies.forEach((movie, index) => {
+        movie.averageRating = averageRating[index];
+      });
       return movies.map((movie) => ({
         id: movie.id,
         kmdbId: movie.kmdbId,
